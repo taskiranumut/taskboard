@@ -3,38 +3,41 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   boards: [
     {
-      id: "0",
+      id: "boardId0",
       title: "First Taskboard",
       columns: [
         {
-          id: "0",
+          id: "columnId0",
           title: "To Do",
-          order: "0",
+          order: 1,
           items: [
             {
-              id: "0",
-              tasks: "Demo Task 0",
+              id: "taskId0",
+              description: "Demo Task 0",
+              order: 1,
             },
             {
-              id: "1",
-              tasks: "Demo Task 1",
+              id: "taskId1",
+              description: "Demo Task 1",
+              order: 2,
             },
             {
-              id: "2",
-              tasks: "Demo Task 2",
+              id: "taskId2",
+              description: "Demo Task 2",
+              order: 3,
             },
           ],
         },
         {
-          id: "1",
+          id: "columnId1",
           title: "In Progress",
-          order: 1,
+          order: 2,
           items: [],
         },
         {
-          id: "3",
+          id: "columnId2",
           title: "Done",
-          order: 2,
+          order: 3,
           items: [],
         },
       ],

@@ -6,8 +6,8 @@ export default function Header({ appTitle }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // It is assumed that there is at least 1 board in the database. So the activeBoardId is set to "0" directly.
-    dispatch(setActiveBoardId("0"));
+    // It is assumed that there is at least 1 board in the database. So the activeBoardId is set to "boardId0" directly.
+    dispatch(setActiveBoardId("boardId0"));
   }, [dispatch]);
 
   const activeBoardId = useSelector((state) => state.activeBoardId);
