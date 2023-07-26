@@ -11,6 +11,18 @@ export default function ColumnHeader({ columntTitle, columnId, columnNum }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const handleEnterKeydown = (e) => {
+      if (isActiveTitleInput && e.key.toLowerCase() === "enter") {
+        handleCloseTitleInput();
+      }
+    };
+
+    document.addEventListener("keydown", handleEnterKeydown);
+
+    return () => document.removeEventListener("keydown", handleEnterKeydown);
+  }, [isActiveTitleInput]);
+
+  useEffect(() => {
     if (!isActiveTitleInput) return;
 
     const inputEl = titleInputRef.current;
