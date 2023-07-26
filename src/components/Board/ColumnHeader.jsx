@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setColumnTitle } from "../../store/slices/boardSlice";
+import { setColumnTitle, setColumnList } from "../../store/slices/boardSlice";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -43,6 +43,20 @@ export default function ColumnHeader({ columntTitle, columnId, columnNum }) {
     setIsActiveTitleInput(false);
   };
 
+  const handleDeleteColumn = (e) => {
+    e.stopPropagation();
+
+    if (columnNum <= 1) return;
+
+    // TODO: Add confirm modal.
+    const isConfirmed = window.confirm(
+      `Do you want to delete "${columntTitle}" column? `
+    );
+    if (!isConfirmed) return;
+
+    dispatch(setColumnList(columnId));
+  };
+
   return (
     <div className="flex justify-between items-center gap-1 py-2 px-4 bg-orange-200 rounded-t-md h-[52px]">
       {isActiveTitleInput ? (
@@ -65,7 +79,12 @@ export default function ColumnHeader({ columntTitle, columnId, columnNum }) {
       )}
 
       {columnNum > 1 && (
-        <Button title="Delete Column" iconBtn bgTransparent>
+        <Button
+          onClick={handleDeleteColumn}
+          title="Delete Column"
+          iconBtn
+          bgTransparent
+        >
           <FontAwesomeIcon icon={faTrash} />
         </Button>
       )}

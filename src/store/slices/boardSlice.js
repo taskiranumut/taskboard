@@ -72,8 +72,23 @@ export const boardSlice = createSlice({
 
       columnToUpdate.title = title;
     },
+    setColumnList: (state, actions) => {
+      console.log("setColumnList actions:", actions);
+
+      const columnId = actions.payload;
+
+      const activeBoard = state.boards.find(
+        (board) => board.id === state.activeBoardId
+      );
+      if (!activeBoard) return;
+
+      activeBoard.columns = activeBoard.columns.filter(
+        (column) => column.id !== columnId
+      );
+    },
   },
 });
 
-export const { setActiveBoardId, setColumnTitle } = boardSlice.actions;
+export const { setActiveBoardId, setColumnTitle, setColumnList } =
+  boardSlice.actions;
 export default boardSlice.reducer;
