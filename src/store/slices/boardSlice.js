@@ -86,9 +86,33 @@ export const boardSlice = createSlice({
         (column) => column.id !== columnId
       );
     },
+    setTaskDescription: (state, actions) => {
+      console.log("setTaskDescription actions:", actions);
+
+      const { columnId, taskId, description } = actions.payload;
+
+      const activeBoard = state.boards.find(
+        (board) => board.id === state.activeBoardId
+      );
+      if (!activeBoard) return;
+
+      const column = activeBoard.columns.find(
+        (column) => column.id === columnId
+      );
+      if (!column) return;
+
+      const task = column.items.find((item) => item.id === taskId);
+      if (!task) return;
+
+      task.description = description;
+    },
   },
 });
 
-export const { setActiveBoardId, setColumnTitle, setColumnList } =
-  boardSlice.actions;
+export const {
+  setActiveBoardId,
+  setColumnTitle,
+  setColumnList,
+  setTaskDescription,
+} = boardSlice.actions;
 export default boardSlice.reducer;

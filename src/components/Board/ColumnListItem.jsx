@@ -14,7 +14,7 @@ export default function ColumnListItem({ columnNum, columnData }) {
         columnNum={columnNum}
       />
       <div className="grid gap-4 p-6">
-        <TaskList items={items} />
+        <TaskList items={items} columnId={columnId} />
         <Button title="Add Task" fullWidth bgTransparent>
           <FontAwesomeIcon icon={faPlus} className="text-sm" />
           <span>Add Task</span>
