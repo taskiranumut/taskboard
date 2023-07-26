@@ -124,7 +124,7 @@ export const boardSlice = createSlice({
       column.items = column.items.filter((item) => item.id !== taskId);
     },
     setAddTask: (state, actions) => {
-      console.log("setTaskList actions:", actions);
+      console.log("setAddTask actions:", actions);
 
       const columnId = actions.payload;
 
@@ -146,6 +146,23 @@ export const boardSlice = createSlice({
         order: itemNum + 1,
       });
     },
+    setAddColumn: (state) => {
+      console.log("setAddColumn worked");
+
+      const activeBoard = state.boards.find(
+        (board) => board.id === state.activeBoardId
+      );
+      if (!activeBoard) return;
+
+      const columnNum = activeBoard.columns.length;
+
+      activeBoard.columns.push({
+        id: `columnId${new Date().getTime()}`,
+        title: "Untitled",
+        order: columnNum + 1,
+        items: [],
+      });
+    },
   },
 });
 
@@ -156,5 +173,6 @@ export const {
   setTaskDescription,
   setTaskList,
   setAddTask,
+  setAddColumn,
 } = boardSlice.actions;
 export default boardSlice.reducer;

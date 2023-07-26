@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveBoardId } from "../store/slices/boardSlice";
+import { setActiveBoardId, setAddColumn } from "../store/slices/boardSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "../shared/Button";
@@ -20,6 +20,10 @@ export default function Header({ appTitle }) {
       "Untitled"
   );
 
+  const handleAddColumn = () => {
+    dispatch(setAddColumn());
+  };
+
   return (
     <header className="bg-orange-400 px-4 py-2 flex justify-between items-center">
       <div>
@@ -28,7 +32,7 @@ export default function Header({ appTitle }) {
           <span className="font-semibold">Board:</span> {boardTitle}
         </h2>
       </div>
-      <Button title="Add Column">
+      <Button onClick={handleAddColumn} title="Add Column">
         <FontAwesomeIcon icon={faPlus} className="text-sm" />
         <span>Add Column</span>
       </Button>
