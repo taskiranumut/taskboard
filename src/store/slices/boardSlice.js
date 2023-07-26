@@ -163,6 +163,30 @@ export const boardSlice = createSlice({
         items: [],
       });
     },
+    moveTask: (state, action) => {
+      const {
+        sourceColumnId,
+        destinationColumnId,
+        sourceIndex,
+        destinationIndex,
+        // draggableId,
+      } = action.payload;
+
+      const activeBoard = state.boards.find(
+        (board) => board.id === state.activeBoardId
+      );
+      if (!activeBoard) return;
+
+      const sourceColumn = activeBoard.columns.find(
+        (column) => column.id === sourceColumnId
+      );
+      const destinationColumn = activeBoard.columns.find(
+        (column) => column.id === destinationColumnId
+      );
+
+      const [removed] = sourceColumn.items.splice(sourceIndex, 1);
+      destinationColumn.items.splice(destinationIndex, 0, removed);
+    },
   },
 });
 
@@ -174,5 +198,6 @@ export const {
   setTaskList,
   setAddTask,
   setAddColumn,
+  moveTask,
 } = boardSlice.actions;
 export default boardSlice.reducer;
