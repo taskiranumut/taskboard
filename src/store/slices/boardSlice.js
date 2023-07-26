@@ -187,6 +187,17 @@ export const boardSlice = createSlice({
       const [removed] = sourceColumn.items.splice(sourceIndex, 1);
       destinationColumn.items.splice(destinationIndex, 0, removed);
     },
+    moveColumn: (state, action) => {
+      const { sourceIndex, destinationIndex } = action.payload;
+
+      const activeBoard = state.boards.find(
+        (board) => board.id === state.activeBoardId
+      );
+      if (!activeBoard) return;
+
+      const [removed] = activeBoard.columns.splice(sourceIndex, 1);
+      activeBoard.columns.splice(destinationIndex, 0, removed);
+    },
   },
 });
 
@@ -199,5 +210,6 @@ export const {
   setAddTask,
   setAddColumn,
   moveTask,
+  moveColumn,
 } = boardSlice.actions;
 export default boardSlice.reducer;

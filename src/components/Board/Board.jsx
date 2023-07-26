@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import ColumnList from "./ColumnList";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
-import { moveTask } from "../../store/slices/boardSlice";
+import { moveTask, moveColumn } from "../../store/slices/boardSlice";
 
 export default function Board() {
   // TODO: Get data dynamically.
@@ -15,7 +15,7 @@ export default function Board() {
   const dispatch = useDispatch();
 
   const onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
 
     if (!destination) {
       return;
@@ -28,23 +28,49 @@ export default function Board() {
       return;
     }
 
-    dispatch(
-      moveTask({
-        sourceColumnId: source.droppableId,
-        destinationColumnId: destination.droppableId,
-        sourceIndex: source.index,
-        destinationIndex: destination.index,
-        draggableId: draggableId,
-      })
-    );
+    if (type === "column") {
+      // move column logic here
+      dispatch(
+        moveColumn({
+          sourceIndex: source.index,
+          destinationIndex: destination.index,
+        })
+      );
+    } else {
+      // move task logic here
+      dispatch(
+        moveTask({
+          sourceColumnId: source.droppableId,
+          destinationColumnId: destination.droppableId,
+          sourceIndex: source.index,
+          destinationIndex: destination.index,
+          draggableId: draggableId,
+        })
+      );
+    }
   };
 
   return (
     <main className="flex justify-center items-start p-12">
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="grid grid-cols-board-auto-fit gap-6 overflow-x-auto w-full justify-items-center">
-          <ColumnList columns={columns} />
-        </div>
+        <Droppable
+          droppableId="all-columns"
+          direction="horizontal"
+          type="column"
+        >
+          {(provided) => {
+            return (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="grid grid-cols-board-auto-fit gap-6 overflow-x-auto w-full justify-items-center"
+              >
+                <ColumnList columns={columns} />
+                {provided.placeholder}
+              </div>
+            );
+          }}
+        </Droppable>
       </DragDropContext>
     </main>
   );
