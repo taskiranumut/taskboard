@@ -20,6 +20,7 @@ export default function ColumnListItem({ columnNum, columnData }) {
         columntTitle={columntTitle}
         columnId={columnId}
         columnNum={columnNum}
+        itemNum={items.length}
       />
       <div className="grid gap-4 p-6">
         <TaskList items={items} columnId={columnId} />

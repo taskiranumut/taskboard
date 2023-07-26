@@ -5,7 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared/Button";
 
-export default function ColumnHeader({ columntTitle, columnId, columnNum }) {
+export default function ColumnHeader({
+  columntTitle,
+  columnId,
+  columnNum,
+  itemNum,
+}) {
   const [isActiveTitleInput, setIsActiveTitleInput] = useState(false);
   const titleInputRef = useRef(null);
   const dispatch = useDispatch();
@@ -69,13 +74,16 @@ export default function ColumnHeader({ columntTitle, columnId, columnNum }) {
           value={columntTitle}
         />
       ) : (
-        <h3
-          className="font-semibold text-lg cursor-pointer"
-          title="Change Title (Double Click)"
-          onDoubleClick={handleOpenTitleInput}
-        >
-          {columntTitle}
-        </h3>
+        <div className="flex justify-start items-center w-full">
+          <h3
+            className="font-semibold text-lg cursor-pointer w-max"
+            title="Change Title (Double Click)"
+            onDoubleClick={handleOpenTitleInput}
+          >
+            {columntTitle}
+          </h3>
+          <span className="font-semibold text-lg ms-2"> | {itemNum}</span>
+        </div>
       )}
 
       {columnNum > 1 && (
