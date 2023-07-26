@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared/Button";
-import { setTaskDescription } from "../../store/slices/boardSlice";
+import { setTaskDescription, setTaskList } from "../../store/slices/boardSlice";
 import { useDispatch } from "react-redux";
 
 export default function TaskListItem({ columnId, itemData }) {
@@ -32,16 +32,34 @@ export default function TaskListItem({ columnId, itemData }) {
       })
     );
 
-    handleCloseEdit(false);
+    handleCloseEdit(null, false);
   };
 
-  const handleOpenEdit = () => {
+  const handleOpenEdit = (e) => {
+    console.log(e);
+    if (e) e.stopPropagation();
+
     setIsActiveEdit(true);
   };
 
-  const handleCloseEdit = (reset = true) => {
+  const handleCloseEdit = (e, reset = true) => {
+    console.log(e);
+    if (e) e.stopPropagation();
+
     setIsActiveEdit(false);
     if (reset) setTaskForm({ description });
+  };
+
+  const handleDeleteTask = (e) => {
+    e.stopPropagation();
+
+    // TODO: Add confirm modal.
+    const isConfirmed = window.confirm(
+      `Do you want to delete "${description}" task? `
+    );
+    if (!isConfirmed) return;
+
+    dispatch(setTaskList({ columnId, taskId }));
   };
 
   return (
@@ -82,6 +100,7 @@ export default function TaskListItem({ columnId, itemData }) {
             </Button>
             <Button
               className="px-1.5"
+              onClick={handleDeleteTask}
               title="Delete Task"
               iconBtn
               bgTransparent
