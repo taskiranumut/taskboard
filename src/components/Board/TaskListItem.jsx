@@ -36,14 +36,12 @@ export default function TaskListItem({ columnId, itemData }) {
   };
 
   const handleOpenEdit = (e) => {
-    console.log(e);
     if (e) e.stopPropagation();
 
     setIsActiveEdit(true);
   };
 
   const handleCloseEdit = (e, reset = true) => {
-    console.log(e);
     if (e) e.stopPropagation();
 
     setIsActiveEdit(false);

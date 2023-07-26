@@ -123,6 +123,29 @@ export const boardSlice = createSlice({
 
       column.items = column.items.filter((item) => item.id !== taskId);
     },
+    setAddTask: (state, actions) => {
+      console.log("setTaskList actions:", actions);
+
+      const columnId = actions.payload;
+
+      const activeBoard = state.boards.find(
+        (board) => board.id === state.activeBoardId
+      );
+      if (!activeBoard) return;
+
+      const column = activeBoard.columns.find(
+        (column) => column.id === columnId
+      );
+      if (!column) return;
+
+      const itemNum = column.items.length;
+
+      column.items.push({
+        id: `taskId${new Date().getTime()}`,
+        description: "",
+        order: itemNum + 1,
+      });
+    },
   },
 });
 
@@ -132,5 +155,6 @@ export const {
   setColumnList,
   setTaskDescription,
   setTaskList,
+  setAddTask,
 } = boardSlice.actions;
 export default boardSlice.reducer;
