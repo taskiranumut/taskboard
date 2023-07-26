@@ -52,10 +52,28 @@ export const boardSlice = createSlice({
   reducers: {
     setActiveBoardId: (state, actions) => {
       console.log("setActiveBoardId actions:", actions);
+
       state.activeBoardId = actions.payload;
+    },
+    setColumnTitle: (state, actions) => {
+      console.log("setColumnTitle actions:", actions);
+
+      const { columnId, title } = actions.payload;
+
+      const activeBoard = state.boards.find(
+        (board) => board.id === state.activeBoardId
+      );
+      if (!activeBoard) return;
+
+      const columnToUpdate = activeBoard.columns.find(
+        (column) => column.id === columnId
+      );
+      if (!columnToUpdate) return;
+
+      columnToUpdate.title = title;
     },
   },
 });
 
-export const { setActiveBoardId } = boardSlice.actions;
+export const { setActiveBoardId, setColumnTitle } = boardSlice.actions;
 export default boardSlice.reducer;
