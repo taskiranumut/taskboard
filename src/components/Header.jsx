@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveBoardId } from "../store/slices/boardSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import Button from "../shared/Button";
 
 export default function Header({ appTitle }) {
   const dispatch = useDispatch();
@@ -18,11 +21,17 @@ export default function Header({ appTitle }) {
   );
 
   return (
-    <header className="bg-orange-400 px-4 py-2">
-      <h1 className="py-2 text-3xl font-semibold">{appTitle}</h1>
-      <h2 className="py-2 text-xl">
-        <span className="font-semibold">Board:</span> {boardTitle}
-      </h2>
+    <header className="bg-orange-400 px-4 py-2 flex justify-between items-center">
+      <div>
+        <h1 className="py-2 text-3xl font-semibold">{appTitle}</h1>
+        <h2 className="py-2 text-xl">
+          <span className="font-semibold">Board:</span> {boardTitle}
+        </h2>
+      </div>
+      <Button title="Add Column">
+        <FontAwesomeIcon icon={faPlus} className="text-sm" />
+        <span>Add Column</span>
+      </Button>
     </header>
   );
 }
