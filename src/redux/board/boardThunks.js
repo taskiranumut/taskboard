@@ -132,3 +132,24 @@ export const deleteTask = createAsyncThunk("deleteTask", async (payload) => {
 
   return true;
 });
+
+export const deleteColumn = createAsyncThunk(
+  "deleteColumn",
+  async (payload) => {
+    const { error: itemsError } = await supabase
+      .from("items")
+      .delete()
+      .eq("column_id", payload.columnRowId);
+
+    if (itemsError) throw itemsError;
+
+    const { error: columnsError } = await supabase
+      .from("columns")
+      .delete()
+      .eq("id", payload.columnRowId);
+
+    if (columnsError) throw columnsError;
+
+    return true;
+  }
+);

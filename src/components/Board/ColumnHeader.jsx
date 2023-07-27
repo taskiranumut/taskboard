@@ -1,10 +1,9 @@
 import { useDispatch } from "react-redux";
-import { setColumnList } from "../../redux/board/boardSlice";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared/Button";
-import { updateColumnTitle } from "../../redux/board/boardThunks";
+import { deleteColumn, updateColumnTitle } from "../../redux/board/boardThunks";
 import { useSelector } from "react-redux";
 
 export default function ColumnHeader({
@@ -75,7 +74,7 @@ export default function ColumnHeader({
     );
     if (!isConfirmed) return;
 
-    dispatch(setColumnList(columnId));
+    dispatch(deleteColumn({ columnId, columnRowId: rowId }));
   };
 
   return (

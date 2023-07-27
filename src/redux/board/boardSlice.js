@@ -6,6 +6,7 @@ import {
   addEmptyTaskToColumn,
   addColumnToBoard,
   deleteTask,
+  deleteColumn,
 } from "./boardThunks";
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
     addEmptyTaskToColumn: { loading: false, error: "" },
     addColumnToBoard: { loading: false, error: "" },
     deleteTask: { loading: false, error: "" },
+    deleteColumn: { loading: false, error: "" },
   },
 };
 
@@ -25,15 +27,6 @@ export const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    setColumnList: (state, action) => {
-      console.log("setColumnList action:", action);
-
-      const columnId = action.payload;
-
-      state.board.columns = state.board.columns.filter(
-        (column) => column.id !== columnId
-      );
-    },
     moveTask: (state, action) => {
       console.log("moveTask action", action);
       const {
@@ -201,8 +194,27 @@ export const boardSlice = createSlice({
         state.asyncStatus[deleteTask.typePrefix].loading = false;
         state.asyncStatus[deleteTask.typePrefix].error = action.error;
       });
+
+    // deleteColumn
+    builder
+      .addCase(deleteColumn.pending, (state) => {
+        state.asyncStatus[deleteColumn.typePrefix].loading = true;
+      })
+      .addCase(deleteColumn.fulfilled, (state, action) => {
+        state.asyncStatus[deleteColumn.typePrefix].loading = false;
+
+        const { columnId } = action.meta.arg;
+
+        state.board.columns = state.board.columns.filter(
+          (column) => column.id !== columnId
+        );
+      })
+      .addCase(deleteColumn.rejected, (state, action) => {
+        state.asyncStatus[deleteColumn.typePrefix].loading = false;
+        state.asyncStatus[deleteColumn.typePrefix].error = action.error;
+      });
   },
 });
 
-export const { setColumnList, moveTask, moveColumn } = boardSlice.actions;
+export const { moveTask, moveColumn } = boardSlice.actions;
 export default boardSlice.reducer;
