@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { supabase } from "../../api/supabaseClient";
 
 export const fetchActiveBoard = createAsyncThunk(
-  "board/fetchActiveBoard",
+  "fetchActiveBoard",
   async () => {
     const {
       data: [board],
@@ -20,17 +20,24 @@ export const fetchActiveBoard = createAsyncThunk(
                 id: uuid,
                 rowId: id,
                 title,
+                order,
                 items (
                     id: uuid,
                     rowId: id,
-                    description
+                    description,
+                    order
                 )
             )
         `
       )
-      .eq("active", true);
+      .eq("active", true)
+      .order("order", { foreignTable: "columns" });
 
-    if (error) throw Error(error);
+    if (error) throw error;
+
+    board.columns.forEach((column) => {
+      column.items.sort((a, b) => a.order - b.order);
+    });
 
     return board;
   }

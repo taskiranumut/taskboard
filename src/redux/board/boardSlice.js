@@ -5,22 +5,15 @@ import { fetchActiveBoard } from "./boardThunks";
 const initialState = {
   board: {},
   boardTitle: "",
-  status: "",
+  asyncStatus: {
+    fetchActiveBoard: { loading: false, error: "" },
+  },
 };
 
 export const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    setBoard: (state, action) => {
-      console.log("setBoards action: ", action);
-      state.board = action.payload;
-    },
-    setBoardTitle: (state, action) => {
-      console.log("setBoardTitle action:", action);
-
-      state.boardTitle = action.payload;
-    },
     setColumnTitle: (state, action) => {
       console.log("setColumnTitle action:", action);
 
@@ -129,23 +122,19 @@ export const boardSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchActiveBoard.pending, (state) => {
-        console.log("Status :>> ", state.status);
-        state.status = "loading";
+        state.asyncStatus[fetchActiveBoard.typePrefix].loading = true;
       })
       .addCase(fetchActiveBoard.fulfilled, (state, action) => {
-        console.log("Status :>> ", state.status);
+        state.asyncStatus[fetchActiveBoard.typePrefix].loading = false;
 
         const board = action.payload;
 
-        state.status = "idle";
         state.board = board;
         state.boardTitle = board?.title ?? "Untitled";
       })
       .addCase(fetchActiveBoard.rejected, (state, action) => {
-        console.log("Status :>> ", state.status);
-
-        state.status = "failed";
-        state.error = action.error.message;
+        state.asyncStatus[fetchActiveBoard.typePrefix].loading = false;
+        state.asyncStatus[fetchActiveBoard.typePrefix].error = action.error;
       });
   },
 });
