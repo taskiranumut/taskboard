@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   board: {},
@@ -74,23 +75,23 @@ export const boardSlice = createSlice({
       );
       if (!column) return;
 
-      const itemNum = column.items.length;
+      // const itemNum = column.items.length;
 
       column.items.push({
-        id: `taskId${new Date().getTime()}`,
+        id: uuidv4(),
         description: "",
-        order: itemNum + 1,
+        // order: itemNum + 1,
       });
     },
     setAddColumn: (state) => {
       console.log("setAddColumn worked");
 
-      const columnNum = state.board.columns.length;
+      // const columnNum = state.board.columns.length;
 
       state.board.columns.push({
-        id: `columnId${new Date().getTime()}`,
+        id: uuidv4(),
         title: "Untitled",
-        order: columnNum + 1,
+        // order: columnNum + 1,
         items: [],
       });
     },
