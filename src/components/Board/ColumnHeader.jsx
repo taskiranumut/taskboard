@@ -17,16 +17,17 @@ export default function ColumnHeader({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const handleEnterKeydown = (e) => {
-      if (isActiveTitleInput && e.key.toLowerCase() === "enter") {
+    const handleEscapeKeydown = (e) => {
+      if (isActiveTitleInput && e.key.toLowerCase() === "escape") {
+        setTitleValue(columntTitle);
         handleCloseTitleInput();
       }
     };
 
-    document.addEventListener("keydown", handleEnterKeydown);
+    document.addEventListener("keydown", handleEscapeKeydown);
 
-    return () => document.removeEventListener("keydown", handleEnterKeydown);
-  }, [isActiveTitleInput]);
+    return () => document.removeEventListener("keydown", handleEscapeKeydown);
+  }, [isActiveTitleInput, columntTitle]);
 
   useEffect(() => {
     if (!isActiveTitleInput) return;
