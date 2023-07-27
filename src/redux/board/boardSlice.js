@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-import { fetchActiveBoard, updateColumnTitle } from "./boardThunks";
+import {
+  fetchActiveBoard,
+  updateColumnTitle,
+  updateTaskDescription,
+} from "./boardThunks";
 
 const initialState = {
   board: {},
@@ -8,6 +12,7 @@ const initialState = {
   asyncStatus: {
     fetchActiveBoard: { loading: false, error: "" },
     updateColumnTitle: { loading: false, error: "" },
+    updateTaskDescription: { loading: false, error: "" },
   },
 };
 
@@ -23,20 +28,6 @@ export const boardSlice = createSlice({
       state.board.columns = state.board.columns.filter(
         (column) => column.id !== columnId
       );
-    },
-    setTaskDescription: (state, action) => {
-      console.log("setTaskDescription action:", action);
-
-      const { columnId, taskId, description } = action.payload;
-      const column = state.board.columns.find(
-        (column) => column.id === columnId
-      );
-      if (!column) return;
-
-      const task = column.items.find((item) => item.id === taskId);
-      if (!task) return;
-
-      task.description = description;
     },
     setTaskList: (state, action) => {
       console.log("setTaskList action:", action);
@@ -109,6 +100,7 @@ export const boardSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // fetchActiveBoard
     builder
       .addCase(fetchActiveBoard.pending, (state) => {
         state.asyncStatus[fetchActiveBoard.typePrefix].loading = true;
@@ -125,6 +117,8 @@ export const boardSlice = createSlice({
         state.asyncStatus[fetchActiveBoard.typePrefix].loading = false;
         state.asyncStatus[fetchActiveBoard.typePrefix].error = action.error;
       });
+
+    // updateColumnTitle
     builder
       .addCase(updateColumnTitle.pending, (state) => {
         state.asyncStatus[updateColumnTitle.typePrefix].loading = true;
@@ -145,12 +139,36 @@ export const boardSlice = createSlice({
         state.asyncStatus[updateColumnTitle.typePrefix].loading = false;
         state.asyncStatus[updateColumnTitle.typePrefix].error = action.error;
       });
+
+    // updateTaskDescription
+    builder
+      .addCase(updateTaskDescription.pending, (state) => {
+        state.asyncStatus[updateTaskDescription.typePrefix].loading = true;
+      })
+      .addCase(updateTaskDescription.fulfilled, (state, action) => {
+        state.asyncStatus[updateTaskDescription.typePrefix].loading = false;
+
+        const { columnId, taskId, description } = action.meta.arg;
+        const column = state.board.columns.find(
+          (column) => column.id === columnId
+        );
+        if (!column) return;
+
+        const task = column.items.find((item) => item.id === taskId);
+        if (!task) return;
+
+        task.description = description;
+      })
+      .addCase(updateTaskDescription.rejected, (state, action) => {
+        state.asyncStatus[updateTaskDescription.typePrefix].loading = false;
+        state.asyncStatus[updateTaskDescription.typePrefix].error =
+          action.error;
+      });
   },
 });
 
 export const {
   setColumnList,
-  setTaskDescription,
   setTaskList,
   setAddTask,
   setAddColumn,

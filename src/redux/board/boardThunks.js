@@ -56,3 +56,18 @@ export const updateColumnTitle = createAsyncThunk(
     return data;
   }
 );
+
+export const updateTaskDescription = createAsyncThunk(
+  "updateTaskDescription",
+  async (payload) => {
+    const { data, error } = await supabase
+      .from("items")
+      .update({ description: payload.description })
+      .eq("id", payload.rowId)
+      .select();
+
+    if (error) throw error;
+
+    return data;
+  }
+);

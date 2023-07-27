@@ -2,15 +2,21 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared/Button";
-import { setTaskDescription, setTaskList } from "../../redux/board/boardSlice";
+import { setTaskList } from "../../redux/board/boardSlice";
 import { useDispatch } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
+import { updateTaskDescription } from "../../redux/board/boardThunks";
+import { useSelector } from "react-redux";
 
 export default function TaskListItem({ columnId, itemData, index }) {
-  const { id: taskId, description } = itemData;
+  const { id: taskId, description, rowId } = itemData;
 
   const [isActiveEdit, setIsActiveEdit] = useState(false);
   const [taskForm, setTaskForm] = useState({ description });
+  // TODO: Use descriptionLoading for api response.
+  const { loading: descriptionLoading } = useSelector(
+    (state) => state.asyncStatus["updateColumnTitle"]
+  );
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -26,9 +32,10 @@ export default function TaskListItem({ columnId, itemData, index }) {
     if (!taskForm.description) return;
 
     dispatch(
-      setTaskDescription({
+      updateTaskDescription({
         columnId,
         taskId,
+        rowId,
         description: taskForm.description,
       })
     );
@@ -102,6 +109,7 @@ export default function TaskListItem({ columnId, itemData, index }) {
                     title="Edit Task"
                     iconBtn
                     bgTransparent
+                    disabled={descriptionLoading}
                   >
                     <FontAwesomeIcon icon={faPen} />
                   </Button>
@@ -111,6 +119,7 @@ export default function TaskListItem({ columnId, itemData, index }) {
                     title="Delete Task"
                     iconBtn
                     bgTransparent
+                    disabled={descriptionLoading}
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </Button>
