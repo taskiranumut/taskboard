@@ -8,7 +8,7 @@ import { setAddTask } from "../../redux/board/boardSlice";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function ColumnListItem({ columnNum, columnData, columnIndex }) {
-  const { id: columnId, title: columntTitle, items } = columnData;
+  const { id: columnId, title: columntTitle, items, rowId } = columnData;
   const dispatch = useDispatch();
 
   const handleAddTask = () => {
@@ -30,6 +30,7 @@ export default function ColumnListItem({ columnNum, columnData, columnIndex }) {
               columnId={columnId}
               columnNum={columnNum}
               itemNum={items.length}
+              rowId={rowId}
             />
             <div className={`grid gap-4 p-6`}>
               <Droppable droppableId={columnId} key={columnId}>

@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-import { fetchActiveBoard } from "./boardThunks";
+import { fetchActiveBoard, updateColumnTitle } from "./boardThunks";
 
 const initialState = {
   board: {},
   boardTitle: "",
   asyncStatus: {
     fetchActiveBoard: { loading: false, error: "" },
+    updateColumnTitle: { loading: false, error: "" },
   },
 };
 
@@ -14,18 +15,6 @@ export const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    setColumnTitle: (state, action) => {
-      console.log("setColumnTitle action:", action);
-
-      const { columnId, title } = action.payload;
-
-      const columnToUpdate = state.board.columns.find(
-        (column) => column.id === columnId
-      );
-      if (!columnToUpdate) return;
-
-      columnToUpdate.title = title;
-    },
     setColumnList: (state, action) => {
       console.log("setColumnList action:", action);
 
@@ -136,13 +125,30 @@ export const boardSlice = createSlice({
         state.asyncStatus[fetchActiveBoard.typePrefix].loading = false;
         state.asyncStatus[fetchActiveBoard.typePrefix].error = action.error;
       });
+    builder
+      .addCase(updateColumnTitle.pending, (state) => {
+        state.asyncStatus[updateColumnTitle.typePrefix].loading = true;
+      })
+      .addCase(updateColumnTitle.fulfilled, (state, action) => {
+        state.asyncStatus[updateColumnTitle.typePrefix].loading = false;
+
+        const { columnId, title } = action.meta.arg;
+
+        const columnToUpdate = state.board.columns.find(
+          (column) => column.id === columnId
+        );
+        if (!columnToUpdate) return;
+
+        columnToUpdate.title = title;
+      })
+      .addCase(updateColumnTitle.rejected, (state, action) => {
+        state.asyncStatus[updateColumnTitle.typePrefix].loading = false;
+        state.asyncStatus[updateColumnTitle.typePrefix].error = action.error;
+      });
   },
 });
 
 export const {
-  setBoard,
-  setBoardTitle,
-  setColumnTitle,
   setColumnList,
   setTaskDescription,
   setTaskList,

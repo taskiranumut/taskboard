@@ -1,19 +1,26 @@
 import { useDispatch } from "react-redux";
-import { setColumnTitle, setColumnList } from "../../redux/board/boardSlice";
+import { setColumnList } from "../../redux/board/boardSlice";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared/Button";
+import { updateColumnTitle } from "../../redux/board/boardThunks";
+import { useSelector } from "react-redux";
 
 export default function ColumnHeader({
   columntTitle,
   columnId,
   columnNum,
   itemNum,
+  rowId,
 }) {
   const [isActiveTitleInput, setIsActiveTitleInput] = useState(false);
   const [titleValue, setTitleValue] = useState(columntTitle);
   const titleInputRef = useRef(null);
+  // TODO: Use titleLoading for api response.
+  const { loading: titleLoading } = useSelector(
+    (state) => state.asyncStatus["updateColumnTitle"]
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -46,7 +53,7 @@ export default function ColumnHeader({
 
     handleCloseTitleInput();
     if (titleValue === columntTitle) return;
-    dispatch(setColumnTitle({ columnId, title: titleValue }));
+    dispatch(updateColumnTitle({ columnId, rowId, title: titleValue }));
   };
 
   const handleOpenTitleInput = () => {
@@ -82,6 +89,7 @@ export default function ColumnHeader({
             onBlur={handleSubmitTitle}
             ref={titleInputRef}
             value={titleValue}
+            disabled={titleLoading}
           />
         </form>
       ) : (

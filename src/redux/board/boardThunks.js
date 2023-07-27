@@ -1,4 +1,3 @@
-// boardThunks.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { supabase } from "../../api/supabaseClient";
 
@@ -40,5 +39,20 @@ export const fetchActiveBoard = createAsyncThunk(
     });
 
     return board;
+  }
+);
+
+export const updateColumnTitle = createAsyncThunk(
+  "updateColumnTitle",
+  async (payload) => {
+    const { data, error } = await supabase
+      .from("columns")
+      .update({ title: payload.title })
+      .eq("id", payload.rowId)
+      .select();
+
+    if (error) throw error;
+
+    return data;
   }
 );
