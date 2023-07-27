@@ -4,7 +4,7 @@ import TaskList from "./TaskList";
 import Button from "../../shared/Button";
 import ColumnHeader from "./ColumnHeader";
 import { useDispatch } from "react-redux";
-import { setAddTask } from "../../store/slices/boardSlice";
+import { setAddTask } from "../../redux/board/boardSlice";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function ColumnListItem({ columnNum, columnData, columnIndex }) {

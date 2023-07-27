@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import ColumnList from "./ColumnList";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
-import { moveTask, moveColumn } from "../../store/slices/boardSlice";
+import { moveTask, moveColumn } from "../../redux/board/boardSlice";
 
 export default function Board() {
   const columns = useSelector((state) => state.board.columns ?? []);

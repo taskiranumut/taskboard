@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setAddColumn } from "../store/slices/boardSlice";
+import { setAddColumn } from "../redux/board/boardSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "../shared/Button";

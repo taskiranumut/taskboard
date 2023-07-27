@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared/Button";
-import { setTaskDescription, setTaskList } from "../../store/slices/boardSlice";
+import { setTaskDescription, setTaskList } from "../../redux/board/boardSlice";
 import { useDispatch } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setColumnTitle, setColumnList } from "../../store/slices/boardSlice";
+import { setColumnTitle, setColumnList } from "../../redux/board/boardSlice";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
