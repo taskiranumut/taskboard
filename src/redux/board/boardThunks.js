@@ -121,3 +121,14 @@ export const addColumnToBoard = createAsyncThunk(
     return data;
   }
 );
+
+export const deleteTask = createAsyncThunk("deleteTask", async (payload) => {
+  const { error } = await supabase
+    .from("items")
+    .delete()
+    .eq("id", payload.rowId);
+
+  if (error) throw error;
+
+  return true;
+});

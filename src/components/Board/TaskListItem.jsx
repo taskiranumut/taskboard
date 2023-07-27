@@ -2,10 +2,12 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared/Button";
-import { setTaskList } from "../../redux/board/boardSlice";
 import { useDispatch } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
-import { updateTaskDescription } from "../../redux/board/boardThunks";
+import {
+  deleteTask,
+  updateTaskDescription,
+} from "../../redux/board/boardThunks";
 import { useSelector } from "react-redux";
 
 export default function TaskListItem({ columnId, itemData, index }) {
@@ -64,8 +66,7 @@ export default function TaskListItem({ columnId, itemData, index }) {
       `Do you want to delete "${description}" task? `
     );
     if (!isConfirmed) return;
-
-    dispatch(setTaskList({ columnId, taskId }));
+    dispatch(deleteTask({ columnId, rowId, taskId }));
   };
 
   return (

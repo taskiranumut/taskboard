@@ -5,6 +5,7 @@ import {
   updateTaskDescription,
   addEmptyTaskToColumn,
   addColumnToBoard,
+  deleteTask,
 } from "./boardThunks";
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
     updateTaskDescription: { loading: false, error: "" },
     addEmptyTaskToColumn: { loading: false, error: "" },
     addColumnToBoard: { loading: false, error: "" },
+    deleteTask: { loading: false, error: "" },
   },
 };
 
@@ -31,17 +33,6 @@ export const boardSlice = createSlice({
       state.board.columns = state.board.columns.filter(
         (column) => column.id !== columnId
       );
-    },
-    setTaskList: (state, action) => {
-      console.log("setTaskList action:", action);
-
-      const { columnId, taskId } = action.payload;
-      const column = state.board.columns.find(
-        (column) => column.id === columnId
-      );
-      if (!column) return;
-
-      column.items = column.items.filter((item) => item.id !== taskId);
     },
     moveTask: (state, action) => {
       console.log("moveTask action", action);
@@ -188,9 +179,30 @@ export const boardSlice = createSlice({
         state.asyncStatus[addColumnToBoard.typePrefix].loading = false;
         state.asyncStatus[addColumnToBoard.typePrefix].error = action.error;
       });
+
+    // deleteTask
+    builder
+      .addCase(deleteTask.pending, (state) => {
+        state.asyncStatus[deleteTask.typePrefix].loading = true;
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.asyncStatus[deleteTask.typePrefix].loading = false;
+
+        const { taskId, columnId } = action.meta.arg;
+
+        const column = state.board.columns.find(
+          (column) => column.id === columnId
+        );
+        if (!column) return;
+
+        column.items = column.items.filter((item) => item.id !== taskId);
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.asyncStatus[deleteTask.typePrefix].loading = false;
+        state.asyncStatus[deleteTask.typePrefix].error = action.error;
+      });
   },
 });
 
-export const { setColumnList, setTaskList, moveTask, moveColumn } =
-  boardSlice.actions;
+export const { setColumnList, moveTask, moveColumn } = boardSlice.actions;
 export default boardSlice.reducer;
