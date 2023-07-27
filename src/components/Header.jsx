@@ -1,16 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setAddColumn } from "../redux/board/boardSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "../shared/Button";
+import { v4 as uuidv4 } from "uuid";
+import { addColumnToBoard } from "../redux/board/boardThunks";
 
 export default function Header({ appTitle }) {
   const dispatch = useDispatch();
 
-  const boardTitle = useSelector((state) => state.boardTitle);
+  const {
+    rowId: boardId,
+    columns,
+    title: boardTitle,
+  } = useSelector((state) => state.board);
 
   const handleAddColumn = () => {
-    dispatch(setAddColumn());
+    dispatch(
+      addColumnToBoard({
+        uuid: uuidv4(),
+        title: "Untitled",
+        order: columns.length + 1,
+        boardId,
+      })
+    );
   };
 
   return (

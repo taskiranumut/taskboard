@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
 import {
   fetchActiveBoard,
   updateColumnTitle,
   updateTaskDescription,
   addEmptyTaskToColumn,
+  addColumnToBoard,
 } from "./boardThunks";
 
 const initialState = {
@@ -15,6 +15,7 @@ const initialState = {
     updateColumnTitle: { loading: false, error: "" },
     updateTaskDescription: { loading: false, error: "" },
     addEmptyTaskToColumn: { loading: false, error: "" },
+    addColumnToBoard: { loading: false, error: "" },
   },
 };
 
@@ -41,18 +42,6 @@ export const boardSlice = createSlice({
       if (!column) return;
 
       column.items = column.items.filter((item) => item.id !== taskId);
-    },
-    setAddColumn: (state) => {
-      console.log("setAddColumn worked");
-
-      // const columnNum = state.board.columns.length;
-
-      state.board.columns.push({
-        id: uuidv4(),
-        title: "Untitled",
-        // order: columnNum + 1,
-        items: [],
-      });
     },
     moveTask: (state, action) => {
       console.log("moveTask action", action);
@@ -176,14 +165,32 @@ export const boardSlice = createSlice({
         state.asyncStatus[addEmptyTaskToColumn.typePrefix].loading = false;
         state.asyncStatus[addEmptyTaskToColumn.typePrefix].error = action.error;
       });
+
+    // addColumnToBoard
+    builder
+      .addCase(addColumnToBoard.pending, (state) => {
+        state.asyncStatus[addColumnToBoard.typePrefix].loading = true;
+      })
+      .addCase(addColumnToBoard.fulfilled, (state, action) => {
+        state.asyncStatus[addColumnToBoard.typePrefix].loading = false;
+
+        const { id: rowId, uuid, order, title } = action.payload;
+
+        state.board.columns.push({
+          id: uuid,
+          title,
+          order,
+          items: [],
+          rowId,
+        });
+      })
+      .addCase(addColumnToBoard.rejected, (state, action) => {
+        state.asyncStatus[addColumnToBoard.typePrefix].loading = false;
+        state.asyncStatus[addColumnToBoard.typePrefix].error = action.error;
+      });
   },
 });
 
-export const {
-  setColumnList,
-  setTaskList,
-  setAddColumn,
-  moveTask,
-  moveColumn,
-} = boardSlice.actions;
+export const { setColumnList, setTaskList, moveTask, moveColumn } =
+  boardSlice.actions;
 export default boardSlice.reducer;

@@ -99,3 +99,25 @@ export const addEmptyTaskToColumn = createAsyncThunk(
     return data;
   }
 );
+
+export const addColumnToBoard = createAsyncThunk(
+  "addColumnToBoard",
+  async (payload) => {
+    const {
+      data: [data],
+      error,
+    } = await supabase
+      .from("columns")
+      .insert({
+        uuid: payload.uuid,
+        title: payload.title,
+        order: payload.order,
+        board_id: payload.boardId,
+      })
+      .select();
+
+    if (error) throw error;
+
+    return data;
+  }
+);
