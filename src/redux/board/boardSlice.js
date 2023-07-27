@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
+import { fetchActiveBoard } from "./boardThunks";
 
 const initialState = {
   board: {},
   boardTitle: "",
+  status: "",
 };
 
 export const boardSlice = createSlice({
@@ -123,6 +125,28 @@ export const boardSlice = createSlice({
       const [removed] = state.board.columns.splice(sourceIndex, 1);
       state.board.columns.splice(destinationIndex, 0, removed);
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchActiveBoard.pending, (state) => {
+        console.log("Status :>> ", state.status);
+        state.status = "loading";
+      })
+      .addCase(fetchActiveBoard.fulfilled, (state, action) => {
+        console.log("Status :>> ", state.status);
+
+        const board = action.payload;
+
+        state.status = "idle";
+        state.board = board;
+        state.boardTitle = board?.title ?? "Untitled";
+      })
+      .addCase(fetchActiveBoard.rejected, (state, action) => {
+        console.log("Status :>> ", state.status);
+
+        state.status = "failed";
+        state.error = action.error.message;
+      });
   },
 });
 
