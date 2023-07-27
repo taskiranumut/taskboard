@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import ColumnList from "./ColumnList";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
-import { moveColumnInDb } from "../../redux/board/boardThunks";
+import { moveColumnInDb, moveTaskInDb } from "../../redux/board/boardThunks";
 import { moveTask, moveColumn } from "../../redux/board/boardSlice";
 
 export default function Board() {
@@ -43,14 +43,27 @@ export default function Board() {
         })
       );
     } else {
-      // move task logic here
+      // TODO: Fix duplicated codes.
+
+      // First mutate the columns order in UI according to optimistic UI approach.
       dispatch(
         moveTask({
           sourceColumnId: source.droppableId,
           destinationColumnId: destination.droppableId,
           sourceIndex: source.index,
           destinationIndex: destination.index,
-          draggableId: draggableId,
+          // draggableId: draggableId,
+        })
+      );
+
+      // After that mutate the orders in db.
+      dispatch(
+        moveTaskInDb({
+          sourceColumnId: source.droppableId,
+          destinationColumnId: destination.droppableId,
+          sourceIndex: source.index,
+          destinationIndex: destination.index,
+          columns: [...columns],
         })
       );
     }

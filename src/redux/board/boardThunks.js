@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { supabase } from "../../api/supabaseClient";
+import { getReorderedList } from "../../utils/utils";
 
 export const fetchActiveBoard = createAsyncThunk(
   "fetchActiveBoard",
@@ -162,10 +163,7 @@ export const moveColumnInDb = createAsyncThunk(
     const [removed] = columns.splice(sourceIndex, 1);
     columns.splice(destinationIndex, 0, removed);
 
-    const newColumns = columns.map((column, index) => ({
-      ...column,
-      order: index + 1,
-    }));
+    const newColumns = getReorderedList(columns);
 
     const updatePromises = newColumns.map((column) =>
       supabase
@@ -181,6 +179,64 @@ export const moveColumnInDb = createAsyncThunk(
         throw result.error;
       }
     }
+
+    return true;
+  }
+);
+
+export const moveTaskInDb = createAsyncThunk(
+  "moveTaskInDb",
+  async (payload) => {
+    const {
+      sourceColumnId,
+      destinationColumnId,
+      sourceIndex,
+      destinationIndex,
+      columns,
+    } = payload;
+
+    const sourceColumn = columns.find((column) => column.id === sourceColumnId);
+    const destinationColumn = columns.find(
+      (column) => column.id === destinationColumnId
+    );
+
+    let sourceItems = [...sourceColumn.items];
+    let destinationItems = [...destinationColumn.items];
+
+    const [removed] = sourceItems.splice(sourceIndex, 1);
+    destinationItems.splice(destinationIndex, 0, removed);
+
+    sourceItems = getReorderedList(sourceItems);
+    destinationItems = getReorderedList(destinationItems);
+
+    await supabase
+      .from("items")
+      .update({ column_id: destinationColumn.rowId })
+      .eq("id", removed.rowId);
+
+    const updatePromisesSource = sourceItems.map((item) =>
+      supabase
+        .from("items")
+        .update({ order: item.order })
+        .eq("column_id", sourceColumn.rowId)
+    );
+
+    await Promise.all(updatePromisesSource);
+
+    const updatePromisesDestination = destinationItems.map((item) =>
+      supabase
+        .from("items")
+        .update({ order: item.order })
+        .eq("column_id", destinationColumn.rowId)
+    );
+
+    await Promise.all(updatePromisesDestination);
+
+    // for (const result of results) {
+    //   if (result.error) {
+    //     throw result.error;
+    //   }
+    // }
 
     return true;
   }

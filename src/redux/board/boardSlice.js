@@ -8,7 +8,9 @@ import {
   deleteTask,
   deleteColumn,
   moveColumnInDb,
+  moveTaskInDb,
 } from "./boardThunks";
+import { getReorderedList } from "../../utils/utils";
 
 const initialState = {
   board: {},
@@ -22,6 +24,7 @@ const initialState = {
     deleteTask: { loading: false, error: "" },
     deleteColumn: { loading: false, error: "" },
     moveColumnInDb: { loading: false, error: "" },
+    moveTaskInDb: { loading: false, error: "" },
   },
 };
 
@@ -48,6 +51,9 @@ export const boardSlice = createSlice({
 
       const [removed] = sourceColumn.items.splice(sourceIndex, 1);
       destinationColumn.items.splice(destinationIndex, 0, removed);
+
+      sourceColumn.items = getReorderedList(sourceColumn.items);
+      destinationColumn.items = getReorderedList(destinationColumn.items);
     },
     moveColumn: (state, action) => {
       const { sourceIndex, destinationIndex } = action.payload;
@@ -55,10 +61,7 @@ export const boardSlice = createSlice({
       const [removed] = state.board.columns.splice(sourceIndex, 1);
       state.board.columns.splice(destinationIndex, 0, removed);
 
-      state.board.columns = state.board.columns.map((column, index) => ({
-        ...column,
-        order: index + 1,
-      }));
+      state.board.columns = getReorderedList(state.board.columns);
     },
   },
   extraReducers: (builder) => {
@@ -230,6 +233,20 @@ export const boardSlice = createSlice({
       .addCase(moveColumnInDb.rejected, (state, action) => {
         state.asyncStatus[moveColumnInDb.typePrefix].loading = false;
         state.asyncStatus[moveColumnInDb.typePrefix].error = action.error;
+      });
+
+    // moveTaskInDb
+    builder
+      .addCase(moveTaskInDb.pending, (state) => {
+        state.asyncStatus[moveTaskInDb.typePrefix].loading = true;
+      })
+      .addCase(moveTaskInDb.fulfilled, (state) => {
+        state.asyncStatus[moveTaskInDb.typePrefix].loading = false;
+      })
+      .addCase(moveTaskInDb.rejected, (state, action) => {
+        console.log(action.error);
+        state.asyncStatus[moveTaskInDb.typePrefix].loading = false;
+        state.asyncStatus[moveTaskInDb.typePrefix].error = action.error;
       });
   },
 });
