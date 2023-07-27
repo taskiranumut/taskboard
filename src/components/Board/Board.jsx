@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import ColumnList from "./ColumnList";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
+import { moveColumnInDb } from "../../redux/board/boardThunks";
 import { moveTask, moveColumn } from "../../redux/board/boardSlice";
 
 export default function Board() {
@@ -24,11 +25,21 @@ export default function Board() {
     }
 
     if (type === "column") {
-      // move column logic here
+      // TODO: Fix duplicated codes.
+
+      // First mutate the columns order in UI according to optimistic UI approach.
       dispatch(
         moveColumn({
           sourceIndex: source.index,
           destinationIndex: destination.index,
+        })
+      );
+      // After that mutate the orders in db.
+      dispatch(
+        moveColumnInDb({
+          sourceIndex: source.index,
+          destinationIndex: destination.index,
+          columns: [...columns],
         })
       );
     } else {

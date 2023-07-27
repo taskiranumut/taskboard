@@ -153,3 +153,35 @@ export const deleteColumn = createAsyncThunk(
     return true;
   }
 );
+
+export const moveColumnInDb = createAsyncThunk(
+  "moveColumnInDb",
+  async (payload) => {
+    const { sourceIndex, destinationIndex, columns } = payload;
+
+    const [removed] = columns.splice(sourceIndex, 1);
+    columns.splice(destinationIndex, 0, removed);
+
+    const newColumns = columns.map((column, index) => ({
+      ...column,
+      order: index + 1,
+    }));
+
+    const updatePromises = newColumns.map((column) =>
+      supabase
+        .from("columns")
+        .update({ order: column.order })
+        .eq("id", column.rowId)
+    );
+
+    const results = await Promise.all(updatePromises);
+
+    for (const result of results) {
+      if (result.error) {
+        throw result.error;
+      }
+    }
+
+    return true;
+  }
+);

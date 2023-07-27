@@ -7,6 +7,7 @@ import {
   addColumnToBoard,
   deleteTask,
   deleteColumn,
+  moveColumnInDb,
 } from "./boardThunks";
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
     addColumnToBoard: { loading: false, error: "" },
     deleteTask: { loading: false, error: "" },
     deleteColumn: { loading: false, error: "" },
+    moveColumnInDb: { loading: false, error: "" },
   },
 };
 
@@ -48,12 +50,15 @@ export const boardSlice = createSlice({
       destinationColumn.items.splice(destinationIndex, 0, removed);
     },
     moveColumn: (state, action) => {
-      console.log("moveColumn action", action);
-
       const { sourceIndex, destinationIndex } = action.payload;
 
       const [removed] = state.board.columns.splice(sourceIndex, 1);
       state.board.columns.splice(destinationIndex, 0, removed);
+
+      state.board.columns = state.board.columns.map((column, index) => ({
+        ...column,
+        order: index + 1,
+      }));
     },
   },
   extraReducers: (builder) => {
@@ -212,6 +217,19 @@ export const boardSlice = createSlice({
       .addCase(deleteColumn.rejected, (state, action) => {
         state.asyncStatus[deleteColumn.typePrefix].loading = false;
         state.asyncStatus[deleteColumn.typePrefix].error = action.error;
+      });
+
+    // moveColumnInDb
+    builder
+      .addCase(moveColumnInDb.pending, (state) => {
+        state.asyncStatus[moveColumnInDb.typePrefix].loading = true;
+      })
+      .addCase(moveColumnInDb.fulfilled, (state) => {
+        state.asyncStatus[moveColumnInDb.typePrefix].loading = false;
+      })
+      .addCase(moveColumnInDb.rejected, (state, action) => {
+        state.asyncStatus[moveColumnInDb.typePrefix].loading = false;
+        state.asyncStatus[moveColumnInDb.typePrefix].error = action.error;
       });
   },
 });
