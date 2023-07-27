@@ -4,6 +4,7 @@ import {
   fetchActiveBoard,
   updateColumnTitle,
   updateTaskDescription,
+  addEmptyTaskToColumn,
 } from "./boardThunks";
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
     fetchActiveBoard: { loading: false, error: "" },
     updateColumnTitle: { loading: false, error: "" },
     updateTaskDescription: { loading: false, error: "" },
+    addEmptyTaskToColumn: { loading: false, error: "" },
   },
 };
 
@@ -39,24 +41,6 @@ export const boardSlice = createSlice({
       if (!column) return;
 
       column.items = column.items.filter((item) => item.id !== taskId);
-    },
-    setAddTask: (state, action) => {
-      console.log("setAddTask action:", action);
-
-      const columnId = action.payload;
-
-      const column = state.board.columns.find(
-        (column) => column.id === columnId
-      );
-      if (!column) return;
-
-      // const itemNum = column.items.length;
-
-      column.items.push({
-        id: uuidv4(),
-        description: "",
-        // order: itemNum + 1,
-      });
     },
     setAddColumn: (state) => {
       console.log("setAddColumn worked");
@@ -164,13 +148,40 @@ export const boardSlice = createSlice({
         state.asyncStatus[updateTaskDescription.typePrefix].error =
           action.error;
       });
+
+    // addEmptyTaskToColumn
+    builder
+      .addCase(addEmptyTaskToColumn.pending, (state) => {
+        state.asyncStatus[addEmptyTaskToColumn.typePrefix].loading = true;
+      })
+      .addCase(addEmptyTaskToColumn.fulfilled, (state, action) => {
+        state.asyncStatus[addEmptyTaskToColumn.typePrefix].loading = false;
+
+        const { id: rowId, uuid, order } = action.payload;
+        const { columnId } = action.meta.arg;
+
+        const column = state.board.columns.find(
+          (column) => column.id === columnId
+        );
+        if (!column) return;
+
+        column.items.push({
+          id: uuid,
+          rowId,
+          description: "",
+          order,
+        });
+      })
+      .addCase(addEmptyTaskToColumn.rejected, (state, action) => {
+        state.asyncStatus[addEmptyTaskToColumn.typePrefix].loading = false;
+        state.asyncStatus[addEmptyTaskToColumn.typePrefix].error = action.error;
+      });
   },
 });
 
 export const {
   setColumnList,
   setTaskList,
-  setAddTask,
   setAddColumn,
   moveTask,
   moveColumn,

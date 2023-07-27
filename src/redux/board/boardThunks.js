@@ -45,7 +45,10 @@ export const fetchActiveBoard = createAsyncThunk(
 export const updateColumnTitle = createAsyncThunk(
   "updateColumnTitle",
   async (payload) => {
-    const { data, error } = await supabase
+    const {
+      data: [data],
+      error,
+    } = await supabase
       .from("columns")
       .update({ title: payload.title })
       .eq("id", payload.rowId)
@@ -60,10 +63,35 @@ export const updateColumnTitle = createAsyncThunk(
 export const updateTaskDescription = createAsyncThunk(
   "updateTaskDescription",
   async (payload) => {
-    const { data, error } = await supabase
+    const {
+      data: [data],
+      error,
+    } = await supabase
       .from("items")
       .update({ description: payload.description })
       .eq("id", payload.rowId)
+      .select();
+
+    if (error) throw error;
+
+    return data;
+  }
+);
+
+export const addEmptyTaskToColumn = createAsyncThunk(
+  "addEmptyTaskToColumn",
+  async (payload) => {
+    const {
+      data: [data],
+      error,
+    } = await supabase
+      .from("items")
+      .insert({
+        uuid: payload.uuid,
+        description: "",
+        order: payload.order,
+        column_id: payload.columnRowId,
+      })
       .select();
 
     if (error) throw error;
