@@ -5,12 +5,7 @@ import { useDispatch } from "react-redux";
 import { moveTask, moveColumn } from "../../store/slices/boardSlice";
 
 export default function Board() {
-  // TODO: Get data dynamically.
-  const activeBoardId = useSelector((state) => state.activeBoardId);
-  const columns = useSelector(
-    (state) =>
-      state.boards.find((item) => item.id === activeBoardId)?.columns ?? []
-  );
+  const columns = useSelector((state) => state.board.columns ?? []);
 
   const dispatch = useDispatch();
 

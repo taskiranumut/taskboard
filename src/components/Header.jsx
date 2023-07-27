@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveBoardId, setAddColumn } from "../store/slices/boardSlice";
+import { setAddColumn } from "../store/slices/boardSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "../shared/Button";
@@ -8,17 +7,7 @@ import Button from "../shared/Button";
 export default function Header({ appTitle }) {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // It is assumed that there is at least 1 board in the database. So the activeBoardId is set to "boardId0" directly.
-    dispatch(setActiveBoardId("boardId0"));
-  }, [dispatch]);
-
-  const activeBoardId = useSelector((state) => state.activeBoardId);
-  const boardTitle = useSelector(
-    (state) =>
-      state.boards.find((item) => item.id === activeBoardId)?.title ??
-      "Untitled"
-  );
+  const boardTitle = useSelector((state) => state.boardTitle);
 
   const handleAddColumn = () => {
     dispatch(setAddColumn());

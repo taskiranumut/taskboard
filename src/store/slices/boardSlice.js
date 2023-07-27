@@ -1,102 +1,49 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  boards: [
-    {
-      id: "boardId0",
-      title: "First Taskboard",
-      columns: [
-        {
-          id: "columnId0",
-          title: "To Do",
-          order: 1,
-          items: [
-            {
-              id: "taskId0",
-              description: "Demo Task 0",
-              order: 1,
-            },
-            {
-              id: "taskId1",
-              description: "Demo Task 1",
-              order: 2,
-            },
-            {
-              id: "taskId2",
-              description: "Demo Task 2",
-              order: 3,
-            },
-          ],
-        },
-        {
-          id: "columnId1",
-          title: "In Progress",
-          order: 2,
-          items: [],
-        },
-        {
-          id: "columnId2",
-          title: "Done",
-          order: 3,
-          items: [],
-        },
-      ],
-    },
-  ],
-  activeBoardId: "",
+  board: {},
+  boardTitle: "",
 };
 
 export const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    setActiveBoardId: (state, actions) => {
-      console.log("setActiveBoardId actions:", actions);
-
-      state.activeBoardId = actions.payload;
+    setBoard: (state, action) => {
+      console.log("setBoards action: ", action);
+      state.board = action.payload;
     },
-    setColumnTitle: (state, actions) => {
-      console.log("setColumnTitle actions:", actions);
+    setBoardTitle: (state, action) => {
+      console.log("setBoardTitle action:", action);
 
-      const { columnId, title } = actions.payload;
+      state.boardTitle = action.payload;
+    },
+    setColumnTitle: (state, action) => {
+      console.log("setColumnTitle action:", action);
 
-      const activeBoard = state.boards.find(
-        (board) => board.id === state.activeBoardId
-      );
-      if (!activeBoard) return;
+      const { columnId, title } = action.payload;
 
-      const columnToUpdate = activeBoard.columns.find(
+      const columnToUpdate = state.board.columns.find(
         (column) => column.id === columnId
       );
       if (!columnToUpdate) return;
 
       columnToUpdate.title = title;
     },
-    setColumnList: (state, actions) => {
-      console.log("setColumnList actions:", actions);
+    setColumnList: (state, action) => {
+      console.log("setColumnList action:", action);
 
-      const columnId = actions.payload;
+      const columnId = action.payload;
 
-      const activeBoard = state.boards.find(
-        (board) => board.id === state.activeBoardId
-      );
-      if (!activeBoard) return;
-
-      activeBoard.columns = activeBoard.columns.filter(
+      state.board.columns = state.board.columns.filter(
         (column) => column.id !== columnId
       );
     },
-    setTaskDescription: (state, actions) => {
-      console.log("setTaskDescription actions:", actions);
+    setTaskDescription: (state, action) => {
+      console.log("setTaskDescription action:", action);
 
-      const { columnId, taskId, description } = actions.payload;
-
-      const activeBoard = state.boards.find(
-        (board) => board.id === state.activeBoardId
-      );
-      if (!activeBoard) return;
-
-      const column = activeBoard.columns.find(
+      const { columnId, taskId, description } = action.payload;
+      const column = state.board.columns.find(
         (column) => column.id === columnId
       );
       if (!column) return;
@@ -106,34 +53,23 @@ export const boardSlice = createSlice({
 
       task.description = description;
     },
-    setTaskList: (state, actions) => {
-      console.log("setTaskList actions:", actions);
+    setTaskList: (state, action) => {
+      console.log("setTaskList action:", action);
 
-      const { columnId, taskId } = actions.payload;
-
-      const activeBoard = state.boards.find(
-        (board) => board.id === state.activeBoardId
-      );
-      if (!activeBoard) return;
-
-      const column = activeBoard.columns.find(
+      const { columnId, taskId } = action.payload;
+      const column = state.board.columns.find(
         (column) => column.id === columnId
       );
       if (!column) return;
 
       column.items = column.items.filter((item) => item.id !== taskId);
     },
-    setAddTask: (state, actions) => {
-      console.log("setAddTask actions:", actions);
+    setAddTask: (state, action) => {
+      console.log("setAddTask action:", action);
 
-      const columnId = actions.payload;
+      const columnId = action.payload;
 
-      const activeBoard = state.boards.find(
-        (board) => board.id === state.activeBoardId
-      );
-      if (!activeBoard) return;
-
-      const column = activeBoard.columns.find(
+      const column = state.board.columns.find(
         (column) => column.id === columnId
       );
       if (!column) return;
@@ -149,14 +85,9 @@ export const boardSlice = createSlice({
     setAddColumn: (state) => {
       console.log("setAddColumn worked");
 
-      const activeBoard = state.boards.find(
-        (board) => board.id === state.activeBoardId
-      );
-      if (!activeBoard) return;
+      const columnNum = state.board.columns.length;
 
-      const columnNum = activeBoard.columns.length;
-
-      activeBoard.columns.push({
+      state.board.columns.push({
         id: `columnId${new Date().getTime()}`,
         title: "Untitled",
         order: columnNum + 1,
@@ -164,6 +95,7 @@ export const boardSlice = createSlice({
       });
     },
     moveTask: (state, action) => {
+      console.log("moveTask action", action);
       const {
         sourceColumnId,
         destinationColumnId,
@@ -172,15 +104,10 @@ export const boardSlice = createSlice({
         // draggableId,
       } = action.payload;
 
-      const activeBoard = state.boards.find(
-        (board) => board.id === state.activeBoardId
-      );
-      if (!activeBoard) return;
-
-      const sourceColumn = activeBoard.columns.find(
+      const sourceColumn = state.board.columns.find(
         (column) => column.id === sourceColumnId
       );
-      const destinationColumn = activeBoard.columns.find(
+      const destinationColumn = state.board.columns.find(
         (column) => column.id === destinationColumnId
       );
 
@@ -188,21 +115,19 @@ export const boardSlice = createSlice({
       destinationColumn.items.splice(destinationIndex, 0, removed);
     },
     moveColumn: (state, action) => {
+      console.log("moveColumn action", action);
+
       const { sourceIndex, destinationIndex } = action.payload;
 
-      const activeBoard = state.boards.find(
-        (board) => board.id === state.activeBoardId
-      );
-      if (!activeBoard) return;
-
-      const [removed] = activeBoard.columns.splice(sourceIndex, 1);
-      activeBoard.columns.splice(destinationIndex, 0, removed);
+      const [removed] = state.board.columns.splice(sourceIndex, 1);
+      state.board.columns.splice(destinationIndex, 0, removed);
     },
   },
 });
 
 export const {
-  setActiveBoardId,
+  setBoard,
+  setBoardTitle,
   setColumnTitle,
   setColumnList,
   setTaskDescription,
