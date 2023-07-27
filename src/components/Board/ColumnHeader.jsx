@@ -12,6 +12,7 @@ export default function ColumnHeader({
   itemNum,
 }) {
   const [isActiveTitleInput, setIsActiveTitleInput] = useState(false);
+  const [titleValue, setTitleValue] = useState(columntTitle);
   const titleInputRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -35,9 +36,16 @@ export default function ColumnHeader({
     inputEl.select();
   }, [isActiveTitleInput]);
 
-  const handleChangeTitle = (e) => {
-    const title = e.target.value;
-    dispatch(setColumnTitle({ columnId, title }));
+  const handleChangeTitleValue = (e) => {
+    setTitleValue(e.target.value);
+  };
+
+  const handleSubmitTitle = (e) => {
+    if (e) e.preventDefault();
+
+    handleCloseTitleInput();
+    if (titleValue === columntTitle) return;
+    dispatch(setColumnTitle({ columnId, title: titleValue }));
   };
 
   const handleOpenTitleInput = () => {
@@ -65,14 +73,16 @@ export default function ColumnHeader({
   return (
     <div className="flex justify-between items-center gap-1 py-2 px-4 bg-orange-200 rounded-t-md h-[52px]">
       {isActiveTitleInput ? (
-        <input
-          type="text"
-          className="px-3 py-2 w-full rounded-md outline-none border border-transparent focus:border-orange-400 transition-colors"
-          onChange={handleChangeTitle}
-          onBlur={handleCloseTitleInput}
-          ref={titleInputRef}
-          value={columntTitle}
-        />
+        <form className="w-full" onSubmit={handleSubmitTitle}>
+          <input
+            type="text"
+            className="px-3 py-2 w-full rounded-md outline-none border border-transparent focus:border-orange-400 transition-colors"
+            onChange={handleChangeTitleValue}
+            onBlur={handleSubmitTitle}
+            ref={titleInputRef}
+            value={titleValue}
+          />
+        </form>
       ) : (
         <div className="flex justify-start items-center w-full">
           <h3
