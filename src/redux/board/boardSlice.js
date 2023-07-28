@@ -10,7 +10,11 @@ import {
   moveColumnInDb,
   moveTaskInDb,
 } from "@/redux/board/boardThunks";
-import { getReorderedList, getToaster } from "@/utils/utils";
+import {
+  getReorderedList,
+  getToaster,
+  moveAndReorderColumns,
+} from "@/utils/utils";
 import { commonErrorMessage } from "@/data/constants";
 
 const initialState = {
@@ -34,7 +38,6 @@ export const boardSlice = createSlice({
   initialState,
   reducers: {
     moveTask: (state, action) => {
-      console.log("moveTask action", action);
       const {
         sourceColumnId,
         destinationColumnId,
@@ -70,10 +73,11 @@ export const boardSlice = createSlice({
     moveColumn: (state, action) => {
       const { sourceIndex, destinationIndex } = action.payload;
 
-      const [removed] = state.board.columns.splice(sourceIndex, 1);
-      state.board.columns.splice(destinationIndex, 0, removed);
-
-      state.board.columns = getReorderedList(state.board.columns);
+      state.board.columns = moveAndReorderColumns(
+        state.board.columns,
+        sourceIndex,
+        destinationIndex
+      );
     },
   },
   extraReducers: (builder) => {

@@ -1,6 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { supabase } from "@/api/supabaseClient";
-import { getReorderedList } from "@/utils/utils";
+import {
+  getReorderedList,
+  moveAndReorderColumns,
+  moveAndReorderTasks,
+} from "@/utils/utils";
 
 export const fetchActiveBoard = createAsyncThunk(
   "fetchActiveBoard",
@@ -160,10 +164,11 @@ export const moveColumnInDb = createAsyncThunk(
   async (payload) => {
     const { sourceIndex, destinationIndex, columns } = payload;
 
-    const [removed] = columns.splice(sourceIndex, 1);
-    columns.splice(destinationIndex, 0, removed);
-
-    const newColumns = getReorderedList(columns);
+    const newColumns = moveAndReorderColumns(
+      columns,
+      sourceIndex,
+      destinationIndex
+    );
 
     const updatePromises = newColumns.map((column) =>
       supabase
@@ -199,9 +204,11 @@ export const moveTaskInDb = createAsyncThunk(
       const column = columns.find((column) => column.id === sourceColumnId);
 
       let columnItems = [...column.items];
-      const [removed] = columnItems.splice(sourceIndex, 1);
-      columnItems.splice(destinationIndex, 0, removed);
-      columnItems = getReorderedList(columnItems);
+      columnItems = moveAndReorderTasks(
+        [...column.items],
+        sourceIndex,
+        destinationIndex
+      );
 
       const updatePromises = columnItems.map((item) =>
         supabase

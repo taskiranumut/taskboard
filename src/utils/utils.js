@@ -7,6 +7,23 @@ export const getReorderedList = (list = []) => {
   }));
 };
 
+export const moveAndReorderColumns = (
+  columns,
+  sourceIndex,
+  destinationIndex
+) => {
+  const [removed] = columns.splice(sourceIndex, 1);
+  columns.splice(destinationIndex, 0, removed);
+
+  return getReorderedList(columns);
+};
+
+export const moveAndReorderTasks = (items, sourceIndex, destinationIndex) => {
+  const [removed] = items.splice(sourceIndex, 1);
+  items.splice(destinationIndex, 0, removed);
+  items = getReorderedList(items);
+};
+
 export const getToaster = (content, status) => {
   switch (status) {
     case "success":
