@@ -26,11 +26,11 @@ export default function Header({ appTitle }) {
   };
 
   return (
-    <header className="bg-orange-400 px-4 py-2 flex justify-between items-center">
+    <header className="bg-orange-400 px-4 py-2 md:px-8 flex justify-between items-center">
       <div>
-        <h1 className="py-2 text-3xl font-semibold">{appTitle}</h1>
-        <h2 className="py-2 text-xl">
-          <span className="font-semibold">Board:</span> {boardTitle}
+        <h1 className="py-2 text-2xl md:text-3xl font-semibold">{appTitle}</h1>
+        <h2 className="py-2 text-lg md:text-xl">
+          <span className="font-semibold w-full">Board:</span> {boardTitle}
         </h2>
       </div>
       <Button onClick={handleAddColumn} title="Add Column">

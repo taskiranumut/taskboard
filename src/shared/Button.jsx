@@ -24,7 +24,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`flex items-center justify-center gap-2 h-min rounded-md py-2 px-4 transition-colors${propsClassNames}`}
+      className={`flex items-center justify-center gap-2 h-min rounded-md py-1 px-2 md:py-2 md:px-4 transition-colors${propsClassNames}`}
       title={title}
       onClick={onClick}
     >
