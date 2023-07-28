@@ -21,7 +21,8 @@ export const moveAndReorderColumns = (
 export const moveAndReorderTasks = (items, sourceIndex, destinationIndex) => {
   const [removed] = items.splice(sourceIndex, 1);
   items.splice(destinationIndex, 0, removed);
-  items = getReorderedList(items);
+
+  return getReorderedList(items);
 };
 
 export const getToaster = (content, status) => {
