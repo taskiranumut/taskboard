@@ -19,6 +19,7 @@ export default function ColumnHeader({
   const titleInputRef = useRef(null);
   // TODO: Use titleLoading for api response.
   const { loading: titleLoading } = useSelector(selectUpdateColumnTitleStatus);
+  const newColumnId = useSelector((state) => state.newColumndId);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,6 +42,12 @@ export default function ColumnHeader({
     inputEl.focus();
     inputEl.select();
   }, [isActiveTitleInput]);
+
+  useEffect(() => {
+    if (newColumnId !== columnId) return;
+
+    handleOpenTitleInput(true);
+  }, [newColumnId, columnId]);
 
   const handleChangeTitleValue = (e) => {
     setTitleValue(e.target.value);

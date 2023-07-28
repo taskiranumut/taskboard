@@ -5,6 +5,7 @@ import Button from "@/shared/Button";
 import { v4 as uuidv4 } from "uuid";
 import { addColumnToBoard } from "@/redux/board/boardThunks";
 import { selectBoard } from "@/redux/board/boardSelectors";
+import { setNewColumnId } from "@/redux/board/boardSlice";
 
 export default function Header({ appTitle }) {
   const dispatch = useDispatch();
@@ -16,9 +17,13 @@ export default function Header({ appTitle }) {
   } = useSelector(selectBoard);
 
   const handleAddColumn = () => {
+    const columnId = uuidv4();
+
+    dispatch(setNewColumnId(columnId));
+
     dispatch(
       addColumnToBoard({
-        uuid: uuidv4(),
+        uuid: columnId,
         title: "Untitled",
         order: columns.length + 1,
         boardId,

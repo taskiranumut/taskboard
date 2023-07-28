@@ -20,6 +20,7 @@ import { commonErrorMessage } from "@/data/constants";
 const initialState = {
   board: {},
   boardTitle: "",
+  newColumndId: null,
   asyncStatus: {
     fetchActiveBoard: { loading: false, error: "" },
     updateColumnTitle: { loading: false, error: "" },
@@ -78,6 +79,9 @@ export const boardSlice = createSlice({
         sourceIndex,
         destinationIndex
       );
+    },
+    setNewColumnId: (state, action) => {
+      state.newColumndId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -317,5 +321,5 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { moveTask, moveColumn } = boardSlice.actions;
+export const { moveTask, moveColumn, setNewColumnId } = boardSlice.actions;
 export default boardSlice.reducer;
