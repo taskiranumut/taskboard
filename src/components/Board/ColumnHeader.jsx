@@ -58,6 +58,8 @@ export default function ColumnHeader({
   const handleSubmitTitle = (e) => {
     if (e) e.preventDefault();
 
+    if (!titleValue) return;
+
     handleCloseTitleInput();
     if (titleValue === columntTitle) return;
     dispatch(updateColumnTitle({ columnId, rowId, title: titleValue }));
