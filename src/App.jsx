@@ -12,10 +12,15 @@ export default function App() {
   const { loading: boardDataLoading } = useSelector(
     selectFetchActiveBoardStatus
   );
+  const boardTitle = useSelector((state) => state.boardTitle);
 
   useEffect(() => {
     dispatch(fetchActiveBoard());
   }, [dispatch]);
+
+  useEffect(() => {
+    document.title = `D&D | ${boardTitle ? boardTitle : ""}`;
+  }, [boardTitle]);
 
   return (
     <>
