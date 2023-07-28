@@ -77,16 +77,20 @@ export default function Board() {
           direction="horizontal"
           type="column"
         >
-          {(provided) => {
+          {(provided, snapshots) => {
             return (
+              /* <-- Start:: Columns container (droppable for columns) --> */
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex justify-center items-start gap-6 flex-wrap md:flex-nowrap overflow-x-auto pb-2 w-full"
+                className={`flex justify-center items-start gap-6 flex-wrap md:flex-nowrap overflow-x-auto transition-colors py-4 w-full rounded-md h-full ${
+                  snapshots.isDraggingOver ? "bg-gray-100" : ""
+                }`}
               >
                 <ColumnList columns={columns} />
                 {provided.placeholder}
               </div>
+              /* <-- End:: Columns container (droppable for columns) --> */
             );
           }}
         </Droppable>

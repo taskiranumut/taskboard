@@ -27,11 +27,12 @@ export default function ColumnListItem({ columnNum, columnData, columnIndex }) {
     <Draggable draggableId={columnId} index={columnIndex}>
       {(provided) => {
         return (
+          /* <-- Start:: Column (draggable for colums container) --> */
           <div
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            className="bg-orange-100 w-full rounded-md min-w-[300px] max-w-[400px]"
+            className="w-full bg-orange-100 rounded-md min-w-[300px] max-w-[400px] h-full self-stretch"
           >
             <ColumnHeader
               columntTitle={columntTitle}
@@ -40,26 +41,27 @@ export default function ColumnListItem({ columnNum, columnData, columnIndex }) {
               itemNum={items.length}
               rowId={rowId}
             />
-            <div className={`grid gap-4 p-6`}>
+            {/* <-- Start:: Column content --> */}
+            <div className={`flex flex-col gap-4 p-6 h-full`}>
               <Droppable droppableId={columnId} key={columnId}>
                 {(provided, snapshots) => {
                   return (
+                    /* <-- Start:: Task list container (droppable for tasks) --> */
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className={`h-[500px] ${
-                        snapshots.isDraggingOver
-                          ? "bg-slate-400"
-                          : "bg-orange-600"
+                      className={`flex flex-col gap-2 rounded-md min-h-[20px] transition-colors  ${
+                        snapshots.isDraggingOver ? "bg-orange-300" : ""
                       }`}
                     >
                       <TaskList items={items} columnId={columnId} />
                       {provided.placeholder}
                     </div>
+                    /* <-- End:: Task list container (droppable for tasks) --> */
                   );
                 }}
               </Droppable>
-
+              {/* <-- Start:: Column action buttons --> */}
               <Button
                 onClick={handleAddTask}
                 title="Add Task"
@@ -69,8 +71,11 @@ export default function ColumnListItem({ columnNum, columnData, columnIndex }) {
                 <FontAwesomeIcon icon={faPlus} className="text-sm" />
                 <span>Add Task</span>
               </Button>
+              {/* <-- End:: Column action buttons --> */}
             </div>
+            {/* <-- End:: Column content --> */}
           </div>
+          /* <-- End:: Column (draggable for colums container) --> */
         );
       }}
     </Draggable>

@@ -80,6 +80,7 @@ export default function ColumnHeader({
   return (
     <div className="flex justify-between items-center gap-1 py-2 px-4 bg-orange-200 rounded-t-md h-[52px]">
       {isActiveTitleInput ? (
+        /* <-- Start:: Column title form --> */
         <form className="w-full" onSubmit={handleSubmitTitle}>
           <input
             type="text"
@@ -92,6 +93,9 @@ export default function ColumnHeader({
           />
         </form>
       ) : (
+        /* <-- End:: Column title form --> */
+
+        /* <-- Start:: Column title --> */
         <div className="flex justify-start items-center w-full">
           <h3
             className="font-semibold text-lg cursor-pointer w-max"
@@ -102,9 +106,11 @@ export default function ColumnHeader({
           </h3>
           <span className="font-semibold text-lg ms-2"> | {itemNum}</span>
         </div>
+        /* <-- End:: Column title --> */
       )}
 
       {columnNum > 1 && (
+        /* <-- Start:: Title action buttons --> */
         <Button
           onClick={handleDeleteColumn}
           title="Delete Column"
@@ -113,6 +119,7 @@ export default function ColumnHeader({
         >
           <FontAwesomeIcon icon={faTrash} />
         </Button>
+        /* <-- End:: Title action buttons --> */
       )}
     </div>
   );
