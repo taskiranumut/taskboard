@@ -195,42 +195,67 @@ export const moveTaskInDb = createAsyncThunk(
       columns,
     } = payload;
 
-    const sourceColumn = columns.find((column) => column.id === sourceColumnId);
-    const destinationColumn = columns.find(
-      (column) => column.id === destinationColumnId
-    );
+    if (destinationColumnId === sourceColumnId) {
+      const column = columns.find((column) => column.id === sourceColumnId);
 
-    let sourceItems = [...sourceColumn.items];
-    let destinationItems = [...destinationColumn.items];
+      let columnItems = [...column.items];
+      const [removed] = columnItems.splice(sourceIndex, 1);
+      columnItems.splice(destinationIndex, 0, removed);
+      columnItems = getReorderedList(columnItems);
 
-    const [removed] = sourceItems.splice(sourceIndex, 1);
-    destinationItems.splice(destinationIndex, 0, removed);
+      const updatePromises = columnItems.map((item) =>
+        supabase
+          .from("items")
+          .update({ order: item.order })
+          .eq("id", item.rowId)
+      );
 
-    sourceItems = getReorderedList(sourceItems);
-    destinationItems = getReorderedList(destinationItems);
+      await Promise.all(updatePromises);
 
-    await supabase
-      .from("items")
-      .update({ column_id: destinationColumn.rowId })
-      .eq("id", removed.rowId);
+      return true;
+    } else {
+      const sourceColumn = columns.find(
+        (column) => column.id === sourceColumnId
+      );
+      const destinationColumn = columns.find(
+        (column) => column.id === destinationColumnId
+      );
 
-    const updatePromisesSource = sourceItems.map((item) =>
-      supabase
+      let sourceItems = [...sourceColumn.items];
+      let destinationItems = [...destinationColumn.items];
+
+      const [removed] = sourceItems.splice(sourceIndex, 1);
+      destinationItems.splice(destinationIndex, 0, removed);
+
+      sourceItems = getReorderedList(sourceItems);
+      destinationItems = getReorderedList(destinationItems);
+
+      console.log("sourceItems :>> ", sourceItems);
+      console.log("destinationItems :>> ", destinationItems);
+
+      await supabase
         .from("items")
-        .update({ order: item.order })
-        .eq("column_id", sourceColumn.rowId)
-    );
+        .update({ column_id: destinationColumn.rowId })
+        .eq("id", removed.rowId);
 
-    await Promise.all(updatePromisesSource);
+      const updatePromisesSource = sourceItems.map((item) =>
+        supabase
+          .from("items")
+          .update({ order: item.order })
+          .eq("id", item.rowId)
+      );
 
-    const updatePromisesDestination = destinationItems.map((item) =>
-      supabase
-        .from("items")
-        .update({ order: item.order })
-        .eq("column_id", destinationColumn.rowId)
-    );
+      await Promise.all(updatePromisesSource);
 
-    await Promise.all(updatePromisesDestination);
+      const updatePromisesDestination = destinationItems.map((item) =>
+        supabase
+          .from("items")
+          .update({ order: item.order })
+          .eq("id", item.rowId)
+      );
+
+      await Promise.all(updatePromisesDestination);
+    }
 
     // for (const result of results) {
     //   if (result.error) {

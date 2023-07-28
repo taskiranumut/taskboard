@@ -42,6 +42,17 @@ export const boardSlice = createSlice({
         // draggableId,
       } = action.payload;
 
+      if (destinationColumnId === sourceColumnId) {
+        const column = state.board.columns.find(
+          (column) => column.id === sourceColumnId
+        );
+
+        const [removed] = column.items.splice(sourceIndex, 1);
+        column.items.splice(destinationIndex, 0, removed);
+        column.items = getReorderedList(column.items);
+        return;
+      }
+
       const sourceColumn = state.board.columns.find(
         (column) => column.id === sourceColumnId
       );
