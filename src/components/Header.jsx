@@ -4,6 +4,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Button from "../shared/Button";
 import { v4 as uuidv4 } from "uuid";
 import { addColumnToBoard } from "../redux/board/boardThunks";
+import { selectBoard } from "../redux/board/boardSelectors";
 
 export default function Header({ appTitle }) {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ export default function Header({ appTitle }) {
     rowId: boardId,
     columns,
     title: boardTitle,
-  } = useSelector((state) => state.board);
+  } = useSelector(selectBoard);
 
   const handleAddColumn = () => {
     dispatch(

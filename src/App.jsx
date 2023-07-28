@@ -5,11 +5,12 @@ import { useDispatch } from "react-redux";
 import { fetchActiveBoard } from "./redux/board/boardThunks";
 import { useSelector } from "react-redux";
 import CustomToaster from "./shared/CustomToaster";
+import { selectFetchActiveBoardStatus } from "./redux/board/boardSelectors";
 
 export default function App() {
   const dispatch = useDispatch();
   const { loading: boardDataLoading } = useSelector(
-    (state) => state.asyncStatus["fetchActiveBoard"]
+    selectFetchActiveBoardStatus
   );
 
   useEffect(() => {

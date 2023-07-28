@@ -4,9 +4,10 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import { moveColumnInDb, moveTaskInDb } from "../../redux/board/boardThunks";
 import { moveTask, moveColumn } from "../../redux/board/boardSlice";
+import { selectBoardColumns } from "../../redux/board/boardSelectors";
 
 export default function Board() {
-  const columns = useSelector((state) => state.board.columns ?? []);
+  const columns = useSelector(selectBoardColumns);
 
   const dispatch = useDispatch();
 

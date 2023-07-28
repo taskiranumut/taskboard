@@ -5,6 +5,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../shared/Button";
 import { deleteColumn, updateColumnTitle } from "../../redux/board/boardThunks";
 import { useSelector } from "react-redux";
+import { selectUpdateColumnTitleStatus } from "../../redux/board/boardSelectors";
 
 export default function ColumnHeader({
   columntTitle,
@@ -17,9 +18,7 @@ export default function ColumnHeader({
   const [titleValue, setTitleValue] = useState(columntTitle);
   const titleInputRef = useRef(null);
   // TODO: Use titleLoading for api response.
-  const { loading: titleLoading } = useSelector(
-    (state) => state.asyncStatus["updateColumnTitle"]
-  );
+  const { loading: titleLoading } = useSelector(selectUpdateColumnTitleStatus);
   const dispatch = useDispatch();
 
   useEffect(() => {

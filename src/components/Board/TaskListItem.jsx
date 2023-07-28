@@ -9,6 +9,7 @@ import {
   updateTaskDescription,
 } from "../../redux/board/boardThunks";
 import { useSelector } from "react-redux";
+import { selectUpdateTaskDescriptionStatus } from "../../redux/board/boardSelectors";
 
 export default function TaskListItem({ columnId, itemData, index }) {
   const { id: taskId, description, rowId } = itemData;
@@ -17,7 +18,7 @@ export default function TaskListItem({ columnId, itemData, index }) {
   const [taskForm, setTaskForm] = useState({ description });
   // TODO: Use descriptionLoading for api response.
   const { loading: descriptionLoading } = useSelector(
-    (state) => state.asyncStatus["updateColumnTitle"]
+    selectUpdateTaskDescriptionStatus
   );
   const dispatch = useDispatch();
 
