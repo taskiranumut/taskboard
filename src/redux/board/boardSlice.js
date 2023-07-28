@@ -10,7 +10,8 @@ import {
   moveColumnInDb,
   moveTaskInDb,
 } from "./boardThunks";
-import { getReorderedList } from "../../utils/utils";
+import { getReorderedList, getToaster } from "../../utils/utils";
+import { commonErrorMessage } from "../../data/constants";
 
 const initialState = {
   board: {},
@@ -90,8 +91,13 @@ export const boardSlice = createSlice({
         state.boardTitle = board?.title ?? "Untitled";
       })
       .addCase(fetchActiveBoard.rejected, (state, action) => {
+        const errorMessage = action.error?.message ?? "";
+        getToaster("Something went wrong.", "error");
+        // TODO: Remove error log.
+        console.error(`(fetchActiveBoard) Error: ${errorMessage}`);
+
         state.asyncStatus[fetchActiveBoard.typePrefix].loading = false;
-        state.asyncStatus[fetchActiveBoard.typePrefix].error = action.error;
+        state.asyncStatus[fetchActiveBoard.typePrefix].error = errorMessage;
       });
 
     // updateColumnTitle
@@ -112,8 +118,13 @@ export const boardSlice = createSlice({
         columnToUpdate.title = title;
       })
       .addCase(updateColumnTitle.rejected, (state, action) => {
+        const errorMessage = action.error?.message ?? "";
+        getToaster(commonErrorMessage, "error");
+        // TODO: Remove error log.
+        console.error(`(updateColumnTitle) Error: ${errorMessage}`);
+
         state.asyncStatus[updateColumnTitle.typePrefix].loading = false;
-        state.asyncStatus[updateColumnTitle.typePrefix].error = action.error;
+        state.asyncStatus[updateColumnTitle.typePrefix].error = errorMessage;
       });
 
     // updateTaskDescription
@@ -136,9 +147,14 @@ export const boardSlice = createSlice({
         task.description = description;
       })
       .addCase(updateTaskDescription.rejected, (state, action) => {
+        const errorMessage = action.error?.message ?? "";
+        getToaster(commonErrorMessage, "error");
+        // TODO: Remove error log.
+        console.error(`(updateTaskDescription) Error: ${errorMessage}`);
+
         state.asyncStatus[updateTaskDescription.typePrefix].loading = false;
         state.asyncStatus[updateTaskDescription.typePrefix].error =
-          action.error;
+          errorMessage;
       });
 
     // addEmptyTaskToColumn
@@ -165,8 +181,13 @@ export const boardSlice = createSlice({
         });
       })
       .addCase(addEmptyTaskToColumn.rejected, (state, action) => {
+        const errorMessage = action.error?.message ?? "";
+        getToaster(commonErrorMessage, "error");
+        // TODO: Remove error log.
+        console.error(`(addEmptyTaskToColumn) Error: ${errorMessage}`);
+
         state.asyncStatus[addEmptyTaskToColumn.typePrefix].loading = false;
-        state.asyncStatus[addEmptyTaskToColumn.typePrefix].error = action.error;
+        state.asyncStatus[addEmptyTaskToColumn.typePrefix].error = errorMessage;
       });
 
     // addColumnToBoard
@@ -188,8 +209,13 @@ export const boardSlice = createSlice({
         });
       })
       .addCase(addColumnToBoard.rejected, (state, action) => {
+        const errorMessage = action.error?.message ?? "";
+        getToaster(commonErrorMessage, "error");
+        // TODO: Remove error log.
+        console.error(`(addColumnToBoard) Error: ${errorMessage}`);
+
         state.asyncStatus[addColumnToBoard.typePrefix].loading = false;
-        state.asyncStatus[addColumnToBoard.typePrefix].error = action.error;
+        state.asyncStatus[addColumnToBoard.typePrefix].error = errorMessage;
       });
 
     // deleteTask
@@ -210,8 +236,13 @@ export const boardSlice = createSlice({
         column.items = column.items.filter((item) => item.id !== taskId);
       })
       .addCase(deleteTask.rejected, (state, action) => {
+        const errorMessage = action.error?.message ?? "";
+        getToaster(commonErrorMessage, "error");
+        // TODO: Remove error log.
+        console.error(`(deleteTask) Error: ${errorMessage}`);
+
         state.asyncStatus[deleteTask.typePrefix].loading = false;
-        state.asyncStatus[deleteTask.typePrefix].error = action.error;
+        state.asyncStatus[deleteTask.typePrefix].error = errorMessage;
       });
 
     // deleteColumn
@@ -229,8 +260,13 @@ export const boardSlice = createSlice({
         );
       })
       .addCase(deleteColumn.rejected, (state, action) => {
+        const errorMessage = action.error?.message ?? "";
+        getToaster(commonErrorMessage, "error");
+        // TODO: Remove error log.
+        console.error(`(deleteColumn) Error: ${errorMessage}`);
+
         state.asyncStatus[deleteColumn.typePrefix].loading = false;
-        state.asyncStatus[deleteColumn.typePrefix].error = action.error;
+        state.asyncStatus[deleteColumn.typePrefix].error = errorMessage;
       });
 
     // moveColumnInDb
@@ -242,8 +278,13 @@ export const boardSlice = createSlice({
         state.asyncStatus[moveColumnInDb.typePrefix].loading = false;
       })
       .addCase(moveColumnInDb.rejected, (state, action) => {
+        const errorMessage = action.error?.message ?? "";
+        getToaster(commonErrorMessage, "error");
+        // TODO: Remove error log.
+        console.error(`(moveColumnInDb) Error: ${errorMessage}`);
+
         state.asyncStatus[moveColumnInDb.typePrefix].loading = false;
-        state.asyncStatus[moveColumnInDb.typePrefix].error = action.error;
+        state.asyncStatus[moveColumnInDb.typePrefix].error = errorMessage;
       });
 
     // moveTaskInDb
@@ -255,9 +296,13 @@ export const boardSlice = createSlice({
         state.asyncStatus[moveTaskInDb.typePrefix].loading = false;
       })
       .addCase(moveTaskInDb.rejected, (state, action) => {
-        console.log(action.error);
+        const errorMessage = action.error?.message ?? "";
+        getToaster(commonErrorMessage, "error");
+        // TODO: Remove error log.
+        console.error(`(moveTaskInDb) Error: ${errorMessage}`);
+
         state.asyncStatus[moveTaskInDb.typePrefix].loading = false;
-        state.asyncStatus[moveTaskInDb.typePrefix].error = action.error;
+        state.asyncStatus[moveTaskInDb.typePrefix].error = errorMessage;
       });
   },
 });
