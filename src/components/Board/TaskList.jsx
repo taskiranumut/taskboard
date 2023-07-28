@@ -1,4 +1,4 @@
-import TaskListItem from "./TaskListItem";
+import TaskListItem from "@/components/Board/TaskListItem";
 
 export default function TaskList({ columnId, items }) {
   return (

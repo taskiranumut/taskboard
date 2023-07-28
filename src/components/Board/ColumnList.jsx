@@ -1,4 +1,4 @@
-import ColumnListItem from "./ColumnListItem";
+import ColumnListItem from "@/components/Board/ColumnListItem";
 
 export default function ColumnList({ columns }) {
   return (

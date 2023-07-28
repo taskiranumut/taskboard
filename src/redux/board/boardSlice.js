@@ -9,9 +9,9 @@ import {
   deleteColumn,
   moveColumnInDb,
   moveTaskInDb,
-} from "./boardThunks";
-import { getReorderedList, getToaster } from "../../utils/utils";
-import { commonErrorMessage } from "../../data/constants";
+} from "@/redux/board/boardThunks";
+import { getReorderedList, getToaster } from "@/utils/utils";
+import { commonErrorMessage } from "@/data/constants";
 
 const initialState = {
   board: {},

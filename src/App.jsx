@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import Board from "./components/Board/Board";
-import Header from "./components/Header";
+import Board from "@/components/Board/Board";
+import Header from "@/components/Header";
 import { useDispatch } from "react-redux";
-import { fetchActiveBoard } from "./redux/board/boardThunks";
+import { fetchActiveBoard } from "@/redux/board/boardThunks";
 import { useSelector } from "react-redux";
-import CustomToaster from "./shared/CustomToaster";
-import { selectFetchActiveBoardStatus } from "./redux/board/boardSelectors";
+import CustomToaster from "@/shared/CustomToaster";
+import { selectFetchActiveBoardStatus } from "@/redux/board/boardSelectors";
 
 export default function App() {
   const dispatch = useDispatch();

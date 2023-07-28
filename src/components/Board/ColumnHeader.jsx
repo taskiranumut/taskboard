@@ -2,10 +2,10 @@ import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../shared/Button";
-import { deleteColumn, updateColumnTitle } from "../../redux/board/boardThunks";
+import Button from "@/shared/Button";
+import { deleteColumn, updateColumnTitle } from "@/redux/board/boardThunks";
 import { useSelector } from "react-redux";
-import { selectUpdateColumnTitleStatus } from "../../redux/board/boardSelectors";
+import { selectUpdateColumnTitleStatus } from "@/redux/board/boardSelectors";
 
 export default function ColumnHeader({
   columntTitle,

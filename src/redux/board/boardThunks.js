@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { supabase } from "../../api/supabaseClient";
-import { getReorderedList } from "../../utils/utils";
+import { supabase } from "@/api/supabaseClient";
+import { getReorderedList } from "@/utils/utils";
 
 export const fetchActiveBoard = createAsyncThunk(
   "fetchActiveBoard",

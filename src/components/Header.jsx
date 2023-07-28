@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Button from "../shared/Button";
+import Button from "@/shared/Button";
 import { v4 as uuidv4 } from "uuid";
-import { addColumnToBoard } from "../redux/board/boardThunks";
-import { selectBoard } from "../redux/board/boardSelectors";
+import { addColumnToBoard } from "@/redux/board/boardThunks";
+import { selectBoard } from "@/redux/board/boardSelectors";
 
 export default function Header({ appTitle }) {
   const dispatch = useDispatch();

@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import TaskList from "./TaskList";
-import Button from "../../shared/Button";
-import ColumnHeader from "./ColumnHeader";
+import TaskList from "@/components/Board/TaskList";
+import Button from "@/shared/Button";
+import ColumnHeader from "@/components/Board/ColumnHeader";
 import { useDispatch } from "react-redux";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { addEmptyTaskToColumn } from "../../redux/board/boardThunks";
+import { addEmptyTaskToColumn } from "@/redux/board/boardThunks";
 import { v4 as uuidv4 } from "uuid";
 
 export default function ColumnListItem({ columnNum, columnData, columnIndex }) {

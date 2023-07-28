@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
-import Button from "../../shared/Button";
+import Button from "@/shared/Button";
 import { useDispatch } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
-import {
-  deleteTask,
-  updateTaskDescription,
-} from "../../redux/board/boardThunks";
+import { deleteTask, updateTaskDescription } from "@/redux/board/boardThunks";
 import { useSelector } from "react-redux";
-import { selectUpdateTaskDescriptionStatus } from "../../redux/board/boardSelectors";
+import { selectUpdateTaskDescriptionStatus } from "@/redux/board/boardSelectors";
 
 export default function TaskListItem({ columnId, itemData, index }) {
   const { id: taskId, description, rowId } = itemData;
