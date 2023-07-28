@@ -69,18 +69,26 @@ export default function TaskListItem({ columnId, itemData, index }) {
   const handleCloseEdit = (e, reset = true) => {
     if (e) e.stopPropagation();
 
+    if (!description && e) {
+      handleDeleteTask();
+      return;
+    }
+
     setIsActiveEdit(false);
+
     if (reset) setTaskForm({ description });
   };
 
   const handleDeleteTask = (e) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
 
-    // TODO: Add confirm modal.
     const isConfirmed = window.confirm(
-      `Do you want to delete "${description}" task?`
+      `Do you want to delete ${
+        description ? `"${description}"` : "created"
+      } task?`
     );
     if (!isConfirmed) return;
+
     dispatch(deleteTask({ columnId, rowId, taskId }));
   };
 
