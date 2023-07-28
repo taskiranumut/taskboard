@@ -31,7 +31,7 @@ export default function ColumnListItem({ columnNum, columnData, columnIndex }) {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            className="bg-orange-100 w-full max-w-[400px] rounded-md"
+            className="bg-orange-100 w-full rounded-md min-w-[300px] max-w-[400px]"
           >
             <ColumnHeader
               columntTitle={columntTitle}

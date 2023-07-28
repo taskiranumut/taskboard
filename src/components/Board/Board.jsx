@@ -11,7 +11,7 @@ export default function Board() {
   const dispatch = useDispatch();
 
   const onDragEnd = (result) => {
-    const { destination, source, draggableId, type } = result;
+    const { destination, source, type } = result;
 
     if (!destination) {
       return;
@@ -70,7 +70,7 @@ export default function Board() {
   };
 
   return (
-    <main className="flex justify-center items-start p-12">
+    <main className="flex justify-center items-start p-6 md:p-12">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"
@@ -82,7 +82,7 @@ export default function Board() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="grid grid-cols-board-auto-fit gap-6 overflow-x-auto w-full justify-items-center"
+                className="flex justify-center items-start gap-6 flex-wrap md:flex-nowrap overflow-x-auto pb-2 w-full"
               >
                 <ColumnList columns={columns} />
                 {provided.placeholder}
