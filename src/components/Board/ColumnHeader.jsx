@@ -6,6 +6,7 @@ import Button from "@/shared/Button";
 import { deleteColumn, updateColumnTitle } from "@/redux/board/boardThunks";
 import { useSelector } from "react-redux";
 import { selectUpdateColumnTitleStatus } from "@/redux/board/boardSelectors";
+import { setNewColumnId } from "@/redux/board/boardSlice";
 
 export default function ColumnHeader({
   columntTitle,
@@ -47,7 +48,8 @@ export default function ColumnHeader({
     if (newColumnId !== columnId) return;
 
     handleOpenTitleInput(true);
-  }, [newColumnId, columnId]);
+    dispatch(setNewColumnId(null));
+  }, [newColumnId, columnId, dispatch]);
 
   const handleChangeTitleValue = (e) => {
     setTitleValue(e.target.value);
