@@ -233,6 +233,7 @@ export const boardSlice = createSlice({
         );
         if (!column) return;
 
+        getToaster(`Task deleted.`, "success");
         column.items = column.items.filter((item) => item.id !== taskId);
       })
       .addCase(deleteTask.rejected, (state, action) => {
@@ -255,9 +256,14 @@ export const boardSlice = createSlice({
 
         const { columnId } = action.meta.arg;
 
+        const columnTitle =
+          state.board.columns.find((column) => column.id === columnId)?.title ??
+          "";
         state.board.columns = state.board.columns.filter(
           (column) => column.id !== columnId
         );
+
+        getToaster(`"${columnTitle}" column deleted.`, "success");
       })
       .addCase(deleteColumn.rejected, (state, action) => {
         const errorMessage = action.error?.message ?? "";

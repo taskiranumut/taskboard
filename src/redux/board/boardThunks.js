@@ -230,9 +230,6 @@ export const moveTaskInDb = createAsyncThunk(
       sourceItems = getReorderedList(sourceItems);
       destinationItems = getReorderedList(destinationItems);
 
-      console.log("sourceItems :>> ", sourceItems);
-      console.log("destinationItems :>> ", destinationItems);
-
       await supabase
         .from("items")
         .update({ column_id: destinationColumn.rowId })
