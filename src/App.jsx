@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import { useDispatch } from "react-redux";
 import { fetchActiveBoard } from "./redux/board/boardThunks";
 import { useSelector } from "react-redux";
+import CustomToaster from "./shared/CustomToaster";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ export default function App() {
 
   return (
     <>
+      <CustomToaster />
       <Header appTitle="Drag & Drop Taskboard" />
       {/* TODO: Create generic loading component. */}
       {boardDataLoading ? (
