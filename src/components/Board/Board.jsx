@@ -84,7 +84,9 @@ export default function Board() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className={`flex justify-center items-start gap-6 flex-wrap md:flex-nowrap overflow-x-auto transition-colors py-4 w-full rounded-md h-full ${
+                className={`flex ${
+                  columns.length > 4 ? "justify-start" : "justify-center"
+                } items-start gap-6 flex-wrap md:flex-nowrap overflow-x-auto transition-colors py-4 w-full rounded-md h-full ${
                   snapshots.isDraggingOver ? "bg-gray-100" : ""
                 }`}
               >
