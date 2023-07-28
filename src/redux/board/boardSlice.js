@@ -21,6 +21,7 @@ const initialState = {
   board: {},
   boardTitle: "",
   newColumndId: null,
+  newTaskId: null,
   asyncStatus: {
     fetchActiveBoard: { loading: false, error: "" },
     updateColumnTitle: { loading: false, error: "" },
@@ -82,6 +83,9 @@ export const boardSlice = createSlice({
     },
     setNewColumnId: (state, action) => {
       state.newColumndId = action.payload;
+    },
+    setNewTaskId: (state, action) => {
+      state.newTaskId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -321,5 +325,6 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { moveTask, moveColumn, setNewColumnId } = boardSlice.actions;
+export const { moveTask, moveColumn, setNewColumnId, setNewTaskId } =
+  boardSlice.actions;
 export default boardSlice.reducer;

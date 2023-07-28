@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/shared/Button";
@@ -7,6 +7,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { deleteTask, updateTaskDescription } from "@/redux/board/boardThunks";
 import { useSelector } from "react-redux";
 import { selectUpdateTaskDescriptionStatus } from "@/redux/board/boardSelectors";
+import { setNewTaskId } from "@/redux/board/boardSlice";
 
 export default function TaskListItem({ columnId, itemData, index }) {
   const { id: taskId, description, rowId } = itemData;
@@ -17,7 +18,23 @@ export default function TaskListItem({ columnId, itemData, index }) {
   const { loading: descriptionLoading } = useSelector(
     selectUpdateTaskDescriptionStatus
   );
+  const newTaskId = useSelector((state) => state.newTaskId);
+  const descriptionTextareaRef = useRef(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (newTaskId !== taskId) return;
+
+    handleOpenEdit();
+    dispatch(setNewTaskId(null));
+  }, [newTaskId, taskId, dispatch]);
+
+  useEffect(() => {
+    if (!isActiveEdit) return;
+
+    const textareaEl = descriptionTextareaRef.current;
+    textareaEl.focus();
+  }, [isActiveEdit]);
 
   const handleChange = (e) => {
     setTaskForm((form) => ({
@@ -83,6 +100,7 @@ export default function TaskListItem({ columnId, itemData, index }) {
               <form className="w-full" onSubmit={handleSubmitTask}>
                 <div className="w-full">
                   <textarea
+                    ref={descriptionTextareaRef}
                     name="description"
                     rows="3"
                     className="px-3 py-2 w-full rounded-md outline-none border border-transparent focus:border-orange-400 transition-colors resize-none"

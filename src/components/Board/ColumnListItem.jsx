@@ -7,15 +7,20 @@ import { useDispatch } from "react-redux";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { addEmptyTaskToColumn } from "@/redux/board/boardThunks";
 import { v4 as uuidv4 } from "uuid";
+import { setNewTaskId } from "@/redux/board/boardSlice";
 
 export default function ColumnListItem({ columnNum, columnData, columnIndex }) {
   const { id: columnId, title: columntTitle, items, rowId } = columnData;
   const dispatch = useDispatch();
 
   const handleAddTask = () => {
+    const taskId = uuidv4();
+
+    dispatch(setNewTaskId(taskId));
+
     dispatch(
       addEmptyTaskToColumn({
-        uuid: uuidv4(),
+        uuid: taskId,
         order: items.length + 1,
         columnRowId: rowId,
         columnId,
