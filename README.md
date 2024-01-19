@@ -1,6 +1,6 @@
 # Drag & Drop Taskboard
 
-This application is a task management application that works in Kanban board style.
+Drag & Drop Taskboard is a dynamic task management application using a Kanban board layout, developed with React.js and Redux Toolkit. It features a responsive design with Tailwind CSS and Vite, and uses Supabase for data storage. Key functionalities include adding, editing, and deleting tasks and columns, along with drag-and-drop capabilities provided by react-beautiful-dnd for easy organization.
 
 👉 [PROJECT DEMO](https://taskboard-eta.vercel.app/)
 
